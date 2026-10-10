@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NewCo · MV/HV grid connection engineering, engineer-sealed</title>
+<meta name="description" content="NewCo is an engineering firm for medium- and high-voltage load connections. AI agents draft, check and track every package; licensed professional engineers review, approve, seal and stay engineer of record through commissioning.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b1626;--navy2:#111f35;--char:#1a2230;--ink:#1b2331;--mute:#5d6878;--line:#e3e7ed;--bg:#f5f6f8;--red:#8b1a1a;--red2:#b02a2a;--redl:#f8eaea;--dline:#24344e;--dtext:#c3ccda;--dmute:#8693a8}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;font-family:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--red)}img,svg{max-width:100%}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:8px;z-index:100}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(11,22,38,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr .wrap{display:flex;align-items:center;height:68px;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:19px;letter-spacing:.2px}
+.mnav{display:flex;gap:2px;margin-left:auto}
+.mnav a{color:var(--dtext);text-decoration:none;font-size:14px;padding:8px 10px;border-radius:6px}
+.mnav a:hover,.mnav a.active{color:#fff;background:rgba(255,255,255,.07)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;text-decoration:none;font-weight:500;padding:12px 20px;border-radius:6px;font-size:15px;border:1px solid var(--red);transition:background .15s,transform .15s;cursor:pointer;font-family:inherit}
+.btn:hover{background:var(--red2);transform:translateY(-1px);color:#fff}
+.btn:disabled{opacity:.6;cursor:default;transform:none}
+.btn.sm{padding:9px 14px;font-size:14px;white-space:nowrap}
+.btn.ghost{background:transparent;border-color:rgba(255,255,255,.28);color:#fff}.btn.ghost:hover{border-color:#fff;background:rgba(255,255,255,.05)}
+.burger{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;padding:8px 10px;cursor:pointer}
+.hero{background:radial-gradient(1200px 600px at 80% 20%,#1a2c4a 0%,var(--navy) 60%);color:#fff;padding:140px 0 70px;position:relative;overflow:hidden}
+.hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e9a9a9;font-weight:500}
+.eyebrow:before{content:"";width:22px;height:2px;background:var(--red2)}
+.hero h1{font-size:52px;line-height:1.08;margin:16px 0 20px;font-weight:700;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:#f1b9b9}
+.hero .lede{font-size:18px;color:var(--dtext);max-width:580px;margin:0 0 28px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;padding-top:24px;border-top:1px solid var(--dline)}
+.hero .facts div{font-size:13px;color:var(--dmute);max-width:200px}.hero .facts strong{display:block;color:#fff;font-size:15px;font-weight:500;margin-bottom:2px}
+.sld{width:100%;height:auto;display:block}
+.sld .wire{stroke:#3b5276;stroke-width:2;fill:none}
+.sld .live{stroke:var(--red2);stroke-width:2.5;fill:none;stroke-dasharray:6 10;animation:flow 1.6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-32}}
+.sld text{fill:#9fb0c8;font-family:"Roboto Mono",monospace;font-size:11px}
+.sld .lbl{fill:#fff;font-family:Roboto,sans-serif;font-size:12px;font-weight:500}
+.sld .box{fill:#111f35;stroke:#3b5276;stroke-width:1.5}
+.sld .seal{fill:var(--red)}
+.gridbg{position:absolute;inset:0;opacity:.35;pointer-events:none}
+section{padding:96px 0}
+.dark{background:var(--navy);color:#fff}.dark p{color:var(--dtext)}
+.char{background:var(--char);color:#fff}.char p{color:var(--dtext)}
+.light{background:var(--bg)}
+.sh{max-width:780px;margin-bottom:48px}
+.sh .eyebrow{color:var(--red)}.dark .sh .eyebrow,.char .sh .eyebrow,.dark .eyebrow{color:#e9a9a9}
+h2{font-size:38px;line-height:1.15;margin:12px 0 16px;letter-spacing:-.3px}
+h3{font-size:20px;margin:0 0 8px;line-height:1.3}
+.sh p{font-size:18px;color:var(--mute);margin:0}.dark .sh p,.char .sh p{color:var(--dtext)}
+.mute{color:var(--mute)}
+.src{font-size:12.5px;color:var(--mute)}.dark .src,.char .src{color:var(--dmute)}.dark .src a,.char .src a,.dark p a{color:#e9a9a9}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px;display:flex;flex-direction:column}
+.stat .n{font-size:44px;font-weight:700;color:var(--navy);line-height:1;letter-spacing:-1px}
+.stat .n small{font-size:20px;font-weight:500;letter-spacing:0}
+.stat p{margin:12px 0 14px;color:var(--ink)}
+.stat .src{margin-top:auto;padding-top:10px;border-top:1px solid var(--line)}
+.stat.feature{grid-column:span 2;background:var(--navy);color:#fff;border-color:var(--navy)}
+.stat.feature .n{color:#fff}.stat.feature p{color:var(--dtext)}.stat.feature .src{border-color:var(--dline);color:var(--dmute)}.stat.feature .src a{color:#e9a9a9}
+.tbar{display:flex;margin:6px 0 8px;border-radius:6px;overflow:hidden;min-height:46px;font-size:13px}
+.tbar div{display:flex;align-items:center;padding:6px 14px;line-height:1.3}
+.tbar .a{flex:1;background:var(--red);color:#fff}.tbar .b{flex:1;background:#2a3d5c;color:#d5ddea}
+.tlab{display:flex;justify-content:space-between;font-size:12px;color:var(--dmute);margin-bottom:14px}
+.causes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+.cause{border-top:3px solid var(--red);padding-top:18px}
+.cause .ic{width:44px;height:44px;border-radius:10px;background:var(--redl);display:grid;place-items:center;margin-bottom:14px}
+.cause p{color:var(--mute);margin:0 0 10px;font-size:15px}
+blockquote.oeb{margin:48px 0 0;padding:26px 30px;background:#fff;border-left:4px solid var(--red);border-radius:6px;font-size:21px;line-height:1.45;color:var(--navy);font-weight:300}
+blockquote.oeb cite{display:block;font-size:13px;color:var(--mute);font-style:normal;margin-top:10px;font-weight:400}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.hcard{background:var(--navy2);border:1px solid var(--dline);border-radius:12px;padding:28px}
+.hcard .k{font-family:"Roboto Mono",monospace;font-size:12px;color:#e9a9a9;margin-bottom:12px}
+.hcard ul{margin:12px 0 0;padding-left:18px;color:var(--dtext);font-size:14.5px}.hcard li{margin-bottom:6px}
+.hcard.hu{border-color:#5a2a33;background:linear-gradient(180deg,#2a1820,#1b1622)}
+.ocra{margin-top:56px;background:var(--navy2);border:1px solid var(--dline);border-radius:14px;padding:30px}
+.ocra-row{display:grid;grid-template-columns:repeat(4,1fr);position:relative;margin-top:22px}
+.ostep{padding:0 16px;position:relative;text-align:center}
+.ostep .dot{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-weight:700;font-size:22px;position:relative;z-index:2}
+.ostep.ai .dot{background:#1f3a5f;color:#cfe0f5;border:2px solid #3c6496}
+.ostep.hu .dot{background:var(--red);color:#fff;border:2px solid #d45a5a}
+.ostep h3{color:#fff;font-size:18px;margin-bottom:4px}.ostep .who{font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.ostep.ai .who{color:#8fb3de}.ostep.hu .who{color:#f0a9a9}
+.ostep p{font-size:14px;margin:0}
+.ocra-line{position:absolute;top:32px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,#3c6496 0 50%,var(--red2) 50% 100%);z-index:1}
+.ocra-split{display:grid;grid-template-columns:1fr 1fr;margin-top:24px;font-size:12px;letter-spacing:1px;text-transform:uppercase;text-align:center}
+.ocra-split span{padding:8px;border-radius:6px 0 0 6px;background:rgba(60,100,150,.18);color:#8fb3de}.ocra-split span+span{border-radius:0 6px 6px 0;background:rgba(176,42,42,.18);color:#f0a9a9}
+.loop{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:center;margin-top:56px}
+.loop ol{list-style:none;padding:0;margin:0;counter-reset:l}
+.loop li{counter-increment:l;padding:10px 0 10px 44px;position:relative;border-bottom:1px solid var(--dline);color:var(--dtext);font-size:15px}
+.loop li:before{content:counter(l);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:50%;border:1px solid #e9a9a9;color:#e9a9a9;font-size:13px;display:grid;place-items:center}
+.loop li strong{color:#fff;font-weight:500}
+.phase{margin-bottom:44px}
+.phase-h{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.phase-h h3{font-size:22px;margin:0;color:var(--navy)}.phase-h span{color:var(--mute);font-size:14px}
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.scard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px;position:relative;transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column}
+.scard:hover{box-shadow:0 10px 28px rgba(11,22,38,.08);transform:translateY(-2px)}
+.scard .step{font-family:"Roboto Mono",monospace;font-size:12px;color:var(--mute)}
+.scard h3{margin:6px 0 8px;font-size:18px;color:var(--navy)}
+.scard p{font-size:14.5px;color:var(--mute);margin:0 0 12px}
+.scard ul{font-size:14px;color:var(--ink);padding-left:18px;margin:0 0 14px}
+.role{margin-top:auto;display:inline-block;align-self:flex-start;font-size:12px;font-weight:500;padding:3px 10px;border-radius:999px}
+.role.own{background:var(--red);color:#fff}.role.sup{background:#e6ebf2;color:#2c4566}.role.cert{background:#f3e7cf;color:#7a5200}
+.notdo{background:#fff;border:1px dashed #c7ced8;border-radius:10px;padding:22px 26px;display:grid;grid-template-columns:220px 1fr;gap:20px}
+.notdo h3{color:var(--navy)}
+.notdo ul{margin:0;padding-left:18px;color:var(--mute);font-size:15px}
+.who-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.wcard{border:1px solid var(--dline);border-radius:12px;padding:24px;background:var(--navy2)}
+.wcard .ic{margin-bottom:16px}
+.wcard h3{color:#fff;font-size:18px}.wcard p{font-size:14.5px;margin:0}
+.buyers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.bcard{border-left:3px solid var(--red2);padding:6px 0 6px 18px}
+.bcard h3{color:#fff;font-size:17px}.bcard p{font-size:14.5px;margin:0}
+.why{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.wy{display:flex;gap:18px;padding:26px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.wy .ic{flex:none;width:48px;height:48px;border-radius:10px;background:var(--navy);display:grid;place-items:center}
+.wy h3{color:var(--navy)}.wy p{margin:0;color:var(--mute);font-size:15px}
+.trust{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+.ti{display:grid;grid-template-columns:40px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--dline)}
+.ti h3{color:#fff;font-size:17px;margin-bottom:4px}.ti p{font-size:14.5px;margin:0}
+.trace{background:#0d1a2c;border:1px solid var(--dline);border-radius:12px;padding:20px;font-family:"Roboto Mono",monospace;font-size:12.5px;color:#a9b8cc;position:sticky;top:90px}
+.trace .th{display:flex;justify-content:space-between;color:#fff;font-family:Roboto,sans-serif;font-size:14px;font-weight:500;margin-bottom:14px}
+.trace .th span{font-size:11px;color:#e9a9a9;border:1px solid #5a2a33;border-radius:4px;padding:1px 6px;font-family:"Roboto Mono",monospace}
+.trow{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:7px 0;border-top:1px dashed #22324a}
+.trow b{color:#7f93ae;font-weight:400}.trow .v{color:#dbe3ee}
+.tnode{display:flex;align-items:center;gap:8px}.tnode i{width:8px;height:8px;border-radius:50%;background:#3c6496;display:inline-block;flex:none}.tnode i.r{background:var(--red2)}
+.trace .note{font-family:Roboto,sans-serif;font-size:11.5px;color:var(--dmute);margin:12px 0 0}
+.utils{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ucard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px}
+.ucard .tag{display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--red);margin-bottom:6px}
+.ucard.next .tag{color:var(--mute)}
+.ucard h3{color:var(--navy);font-size:18px}.ucard p{font-size:14.5px;color:var(--mute);margin:0 0 10px}
+.ucard a{font-size:14px}
+.umap{margin-top:28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--mute)}
+.umap .pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;color:var(--ink)}
+.umap .arr{color:var(--red)}
+.cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:15px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.cmp th,.cmp td{padding:16px 18px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.cmp thead th{background:#eef1f5;color:var(--navy);font-size:14px;font-weight:700}
+.cmp thead th.nc{background:var(--navy);color:#fff;position:relative}
+.cmp thead th.nc:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--red2)}
+.cmp td.nc{background:#fbf6f6;color:var(--ink);font-weight:500}
+.cmp tbody th{font-weight:500;color:var(--navy);width:20%;background:#fafbfc}
+.cmp tr:last-child td,.cmp tr:last-child th{border-bottom:0}
+.cmpwrap{overflow-x:auto;border-radius:12px}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.q{background:var(--navy2);border:1px solid var(--dline);border-radius:12px;padding:26px;display:flex;flex-direction:column;margin:0}
+.q p{color:#fff;font-size:17px;line-height:1.5;font-weight:300;margin:0 0 18px}
+.q p:before{content:"\201C";color:var(--red2);font-size:44px;line-height:0;vertical-align:-16px;margin-right:4px;font-weight:700}
+.q cite{font-style:normal;font-size:13px;color:var(--dmute);margin-top:auto}
+.q.wide{grid-column:span 2}.q.wide p{font-size:24px}
+.price{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.pkgs{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.pkg{display:flex;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);align-items:center}
+.pkg:last-child{border-bottom:0}
+.pkg strong{color:var(--navy);font-weight:500}.pkg span{font-size:13px;color:var(--mute);display:block}
+.pkg em{font-style:normal;font-size:13px;font-weight:500;color:var(--red);white-space:nowrap;border:1px solid #e6c4c4;border-radius:999px;padding:3px 10px}
+.pnotes{list-style:none;padding:0;margin:20px 0 0}.pnotes li{padding:10px 0 10px 32px;position:relative;border-bottom:1px solid var(--line);font-size:15px}
+.pnotes li:before{content:"";position:absolute;left:6px;top:16px;width:11px;height:6px;border-left:2px solid var(--red);border-bottom:2px solid var(--red);transform:rotate(-45deg)}
+.faq{max-width:880px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:20px 40px 20px 0;font-size:17px;font-weight:500;color:var(--navy);position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"";position:absolute;right:8px;top:26px;width:10px;height:10px;border-right:2px solid var(--red);border-bottom:2px solid var(--red);transform:rotate(45deg);transition:transform .2s}
+.faq details[open] summary:after{transform:rotate(225deg);top:30px}
+.faq details p{margin:0 0 20px;color:var(--mute)}
+.about{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.about .big{font-size:28px;line-height:1.35;color:#fff;font-weight:300;margin:0 0 20px}
+.cstats{display:grid;gap:14px}
+.cs{border:1px solid var(--dline);border-radius:10px;padding:20px;background:var(--navy2)}
+.cs .n{font-size:32px;font-weight:700;color:#fff;line-height:1}.cs p{margin:8px 0 6px;font-size:14.5px}
+.contact{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px}
+form{background:#fff;border:1px solid var(--line);border-radius:12px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:var(--navy)}
+input,select,textarea{font:inherit;font-size:15px;padding:11px 12px;border:1px solid #cdd3dc;border-radius:6px;background:#fff;color:var(--ink);width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--red);outline-offset:0;border-color:var(--red)}
+.full{grid-column:1/-1}textarea{min-height:110px;resize:vertical}
+.chk{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400;color:var(--mute)}.chk input{width:auto;margin-top:4px}
+.formmsg{grid-column:1/-1;display:none;background:#eaf5ee;border:1px solid #bfe0cb;color:#1f6b42;border-radius:6px;padding:12px 14px;font-size:14px}
+.formmsg.show{display:block}
+.err{color:var(--red2);font-size:12px;font-weight:400}.err:empty{display:none}
+.cinfo{list-style:none;padding:0;margin:24px 0 0}.cinfo li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}.cinfo svg{flex:none;margin-top:2px}
+footer{background:#070f1b;color:var(--dmute);padding:56px 0 30px;font-size:14px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+footer h4{color:#fff;font-size:14px;margin:0 0 12px;font-weight:500}
+footer a{color:var(--dtext);text-decoration:none;display:block;padding:3px 0}footer a:hover{color:#fff}
+.fbot{border-top:1px solid #1a2639;margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12.5px}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.sld .live{animation:none}html{scroll-behavior:auto}}
+@media (max-width:1180px){.mnav a{padding:8px 6px;font-size:13px}.hdr .wrap{gap:14px}}
+@media (max-width:1040px){
+.mnav{display:none;position:absolute;top:68px;left:0;right:0;background:var(--navy);flex-direction:column;padding:10px 20px 20px;border-bottom:1px solid var(--dline)}
+.mnav.open{display:flex}.mnav a{font-size:16px;padding:12px 8px}
+.burger{display:block}.hdr .btn.sm{display:none}
+.hero .grid,.trust,.loop,.price,.about,.contact{grid-template-columns:1fr}
+.stats,.how,.svc,.quotes,.utils,.who-grid{grid-template-columns:1fr 1fr}
+.trace{position:static}}
+@media (max-width:640px){
+.wrap{padding:0 20px}section{padding:68px 0}
+.hero{padding:108px 0 50px}.hero h1{font-size:36px}.hero .lede{font-size:16px}
+h2{font-size:28px}.sh p{font-size:16px}.sh{margin-bottom:32px}
+.stats,.how,.svc,.quotes,.utils,.who-grid,.buyers,.why,.causes{grid-template-columns:1fr}
+.stat.feature,.q.wide{grid-column:auto}.stat .n{font-size:36px}.q.wide p{font-size:19px}
+.ocra{padding:22px}.ocra-row{grid-template-columns:1fr;gap:22px}.ocra-line{display:none}
+.ostep{display:grid;grid-template-columns:56px 1fr;text-align:left;gap:0 14px;padding:0}.ostep .dot{width:52px;height:52px;margin:0;grid-row:span 3;font-size:18px}
+.ocra-split{font-size:10px}
+.notdo{grid-template-columns:1fr}form{grid-template-columns:1fr;padding:20px}
+.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}
+.tbar{flex-direction:column}.tbar div{padding:10px 12px}
+blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
+.cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:100%}.cmp thead{display:none}.cmp{border:0;background:none;font-size:14.5px}
+.cmp tr{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.cmp tbody th{width:100%;background:var(--navy);color:#fff;padding:12px 14px}
+.cmp td{padding:10px 14px;border-bottom:1px solid var(--line)}.cmp td:before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--mute);font-weight:700;margin-bottom:2px}
+.cmp td.nc:before{color:var(--red)}.cmp tr:last-child td{border-bottom:1px solid var(--line)}.cmp td:last-child{border-bottom:0!important}
+.hero .facts{grid-template-columns:1fr;gap:12px}
+.wy{flex-direction:column;padding:22px}.pkg{flex-direction:column;align-items:flex-start;gap:8px}
+.trow{grid-template-columns:86px 1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="hdr">
+<div class="wrap">
+<a class="logo" href="#hero" aria-label="NewCo home"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="6" fill="#8b1a1a"/><path d="M7 22V8l8 9 8-9v14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="15" cy="17" r="1.8" fill="#fff"/></svg>NewCo</a>
+<nav class="mnav" id="mnav" aria-label="Main">
+<a href="#problem">Problem</a><a href="#how">How it works</a><a href="#services">Services</a><a href="#who">Who it's for</a><a href="#trust">Trust</a><a href="#utilities">Utilities</a><a href="#compare">Compare</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#about">About</a>
+</nav>
+<a class="btn sm" href="#contact">Request an assessment</a>
+<button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="#fff" stroke-width="2"/></svg></button>
+</div>
+</header>
+<main id="main">
+<section class="hero" id="hero">
+<svg class="gridbg" aria-hidden="true" width="100%" height="100%"><defs><pattern id="gp" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#1d3050" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#gp)"/></svg>
+<div class="wrap grid" style="position:relative">
+<div>
+<span class="eyebrow">MV/HV grid connection engineering</span>
+<h1>Grid connection engineering, <em>signed</em> and moving.</h1>
+<p class="lede">NewCo is an engineering firm for medium- and high-voltage load connections. AI agents draft, check and track every package. Licensed professional engineers review, approve and seal it, and stay engineer of record from application through commissioning.</p>
+<div class="ctas"><a class="btn" href="#contact">Request a connection assessment <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="#fff" stroke-width="2"/></svg></a><a class="btn ghost" href="#how">See how it works</a></div>
+<div class="facts">
+<div><strong>Engineer-sealed</strong>A licensed engineer signs every package</div>
+<div><strong>Fixed price</strong>Quoted per package, comment rounds included</div>
+<div><strong>Ontario first</strong>Toronto Hydro · Alectra · Hydro One Distribution</div>
+</div>
+</div>
+<div>
+<svg class="sld" viewBox="0 0 520 470" role="img" aria-label="Abstract single-line diagram: utility supply, transformer, main breaker and load bus, with agent and engineer review stages">
+<text x="20" y="30">UTILITY SUPPLY · MV</text>
+<path class="wire" d="M40 44h440"/><path class="live" d="M40 44h440"/>
+<path class="wire" d="M260 44v42"/><path class="live" d="M260 44v42"/>
+<circle cx="260" cy="104" r="18" fill="none" stroke="#7d93b5" stroke-width="2"/><circle cx="260" cy="128" r="18" fill="none" stroke="#7d93b5" stroke-width="2"/>
+<text x="290" y="112">TX-1</text><text x="290" y="128">service transformer</text>
+<path class="wire" d="M260 146v34"/><path class="live" d="M260 146v34"/>
+<rect x="246" y="180" width="28" height="28" class="box" rx="3"/><path d="M252 202l16-16" stroke="#7d93b5" stroke-width="2"/>
+<text x="290" y="198">52-M main breaker</text>
+<path class="wire" d="M260 208v40"/><path class="live" d="M260 208v40"/>
+<path d="M70 248h380" stroke="#c9d4e4" stroke-width="5"/>
+<text x="70" y="238">LOAD BUS</text>
+<path class="wire" d="M120 248v40M260 248v40M400 248v40"/>
+<rect x="70" y="288" width="100" height="48" rx="6" class="box"/><text x="82" y="308" class="lbl">Industrial</text><text x="82" y="324">process load</text>
+<rect x="210" y="288" width="100" height="48" rx="6" class="box"/><text x="222" y="308" class="lbl">EV / fleet</text><text x="222" y="324">charging depot</text>
+<rect x="350" y="288" width="100" height="48" rx="6" class="box"/><text x="362" y="308" class="lbl">Data centre</text><text x="362" y="324">IT + cooling</text>
+<g transform="translate(20,370)">
+<rect width="480" height="84" rx="10" fill="#0f1c30" stroke="#24344e"/>
+<text x="16" y="22">PACKAGE · ORIGINATOR → CHECKER → REVIEWER → APPROVER</text>
+<g transform="translate(16,36)"><rect width="100" height="32" rx="5" fill="#1f3a5f"/><text x="12" y="20" class="lbl">Agent drafts</text></g>
+<g transform="translate(130,36)"><rect width="100" height="32" rx="5" fill="#1f3a5f"/><text x="12" y="20" class="lbl">Agent checks</text></g>
+<g transform="translate(244,36)"><rect width="100" height="32" rx="5" fill="#5a2230"/><text x="10" y="20" class="lbl">P.Eng reviews</text></g>
+<g transform="translate(358,36)"><rect width="106" height="32" rx="5" class="seal"/><text x="12" y="20" class="lbl">P.Eng seals ✓</text></g>
+</g>
+</svg>
+</div>
+</div>
+</section>
+
+<section class="light" id="problem">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">The problem</span><h2>Medium- and high-voltage connections are slow, and much of the wait is engineering and review.</h2><p>Every new MV or HV load, whether a factory, data centre, EV depot or large building, has to be designed, studied and approved before anything is built. Demand is rising faster than anyone can review it.</p></div>
+<div class="stats">
+<div class="stat feature reveal"><div class="n">Close to half</div><p>of the time from the first impact studies to energization in Hydro One's recent large-load connections went to those studies (the System Impact Assessment and Customer Impact Assessment) and to cost estimates. Add the feasibility and application work that comes first, and roughly half of the total timeline passes before anything is built.</p>
+<div class="tbar" aria-hidden="true"><div class="a">Before construction: screening, application, studies, estimates, design</div><div class="b">Equipment and construction</div></div>
+<div class="tlab"><span>NewCo works here</span><span>Illustrative, not to scale</span></div>
+<div class="src">Source: <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">OEB, Streamlining Ontario's Electricity Connection Framework, Table 1, p. 23</a></div></div>
+<div class="stat reveal"><div class="n">75%</div><p>Forecast rise in Ontario's electricity demand by 2050, led by industrial electrification.</p><div class="src">Source: <a href="https://ieso.ca/-/media/Files/IESO/Document-Library/planning-forecasts/apo/2025/2025-Annual-Planning-Outlook.pdf" target="_blank" rel="noopener">IESO, 2025 Annual Planning Outlook</a></div></div>
+<div class="stat reveal"><div class="n">24 → 166<small> GW</small></div><p>US utilities' five-year peak-growth forecasts, 2022 to 2025.</p><div class="src">Source: <a href="https://gridstrategiesllc.com/wp-content/uploads/Grid-Strategies-National-Load-Growth-Report-2025.pdf" target="_blank" rel="noopener">Grid Strategies, National Load Growth Report 2025</a></div></div>
+<div class="stat reveal"><div class="n">~6,000<small> MW</small></div><p>Data-centre requests on Ontario's grid in May 2026, up 70% in two months.</p><div class="src">Source: <a href="https://www.link2build.ca/news/posts/data-centres-top-ottawa-s-big-power-requests-placing-pressure-on-local-utility/" target="_blank" rel="noopener">Link2Build</a></div></div>
+<div class="stat reveal"><div class="n">8<small> months</small></div><p>Median backlog at Canadian consulting engineering firms.</p><div class="src">Source: <a href="https://acec.ca/publications/industry_outlook.html" target="_blank" rel="noopener">ACEC-Canada, Industry Outlook</a></div></div>
+</div>
+<div class="causes">
+<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 11h6M19 8v6"/></svg></div><h3>Not enough engineers on either side</h3><p>Utility connection teams are sized by multi-year rate plans and can't grow when requests jump. At Toronto Hydro, a senior engineer carries 20 to 30 high-voltage projects at once, and a medium-voltage engineer up to 60.</p><p class="src">Per Toronto Hydro's Customer Connections Intake Manager (practitioner interview).</p></div>
+<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5"/><path d="M8 13l3 3M11 13l-3 3M13 15h4"/></svg></div><h3>Requirements differ by utility, so packages come back</h3><p>Each utility has its own drawing requirements and templates, checklists are generic, and comments arrive in rounds. Missing items often surface only after a utility engineer opens the file.</p><p class="src">Practitioner interviews; <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">OEB</a>.</p></div>
+<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M3 6h12v8H8l-4 3v-3H3z"/><path d="M15 9h6v8h-1v3l-4-3h-4v-3"/></svg></div><h3>Coordination runs on email, phone and paper</h3><p>A utility connection engineer spends an estimated 30–40% of the day on communication. There is no shared tracker applicants can check, so they email and call for updates.</p><p class="src">Per Toronto Hydro's Customer Connections Intake Manager (practitioner interview; estimate).</p></div>
+</div>
+<blockquote class="oeb reveal">"Relatively limited changes in information often result in restarting the assessment timeline from the beginning."<cite>Ontario Energy Board, <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">Streamlining Ontario's Electricity Connection Framework</a>. The OEB also notes that engineering design is the one step in the connection process with no required timeline.</cite></blockquote>
+</div>
+</section>
+
+<section class="dark" id="how">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">How it works</span><h2>Agents draft, check and track. Engineers review, approve and seal.</h2><p>NewCo's production system is a set of role agents, each mirroring an accountable position in a conventional consulting practice, supervised by licensed engineers who hold the only authority to approve and seal.</p></div>
+<div class="how">
+<div class="hcard reveal"><div class="k">01 · DRAFT</div><h3>Agents prepare the package</h3><p>Role agents originate the work from a single project record, so a change propagates everywhere.</p><ul><li>Load calculations and concept single-lines</li><li>Application drawings, site plans and equipment data</li><li>Utility forms populated from the project record</li><li>Study cases built and run in ETAP, SKM, PSS/E or PSCAD</li></ul></div>
+<div class="hcard reveal"><div class="k">02 · CHECK &amp; TRACK</div><h3>An independent checker, and one tracker</h3><p>A separate checker agent, plus deterministic rule checks, tests every package against the utility's own requirements before it is filed.</p><ul><li>Per-utility rulebook, updated from every comment round</li><li>Consistency across drawings, calculations and forms</li><li>Utility status, comments and deadlines tracked in one place</li><li>Client status portal: you always know where the package is</li></ul></div>
+<div class="hcard hu reveal"><div class="k">03 · REVIEW &amp; SEAL</div><h3>A licensed engineer signs</h3><p>The engineer of record sets the design basis at kickoff, reviews every finding, approves the package and applies the seal personally.</p><ul><li>Design-basis approval before drafting starts</li><li>Study conclusions and protection settings always reviewed in full</li><li>Seal applied by the engineer; agents never hold signing credentials</li><li>Same engineer of record through commissioning</li></ul></div>
+</div>
+<div class="ocra reveal">
+<span class="eyebrow">The OCRA sign-off chain</span>
+<h3 style="color:#fff;margin-top:10px;font-size:22px">Four levels on every deliverable, the way engineering firms already record responsibility</h3>
+<div class="ocra-row"><div class="ocra-line" aria-hidden="true"></div>
+<div class="ostep ai"><div class="dot">O</div><h3>Originator</h3><div class="who">Role agent</div><p>Cites every input it used. Output is a draft until checked.</p></div>
+<div class="ostep ai"><div class="dot">C</div><h3>Checker</h3><div class="who">Checker agent + rules</div><p>Independent of the originator: separate context and instructions, plus deterministic rule checks.</p></div>
+<div class="ostep hu"><div class="dot">R</div><h3>Reviewer</h3><div class="who">Discipline engineer</div><p>Reviews the findings, samples the work, and resolves every finding with a recorded reason.</p></div>
+<div class="ostep hu"><div class="dot">A</div><h3>Approver</h3><div class="who">Engineer of record</div><p>Approves the design basis and the package at issue, and applies the seal personally.</p></div>
+</div>
+<div class="ocra-split"><span>Agents originate and check</span><span>Engineers review, approve and seal</span></div>
+</div>
+<div class="loop">
+<div class="reveal"><span class="eyebrow">Learning from every comment</span><h2 style="font-size:30px">Every utility comment becomes a check on the next package.</h2><p>Requirements differ by utility and are rarely written down. NewCo records what each utility's reviewers actually ask for and checks every package against it before submission, so packages arrive complete the first time.</p></div>
+<ol class="reveal">
+<li><strong>Capture</strong> the utility's comment letter or markup.</li>
+<li><strong>Classify</strong> it by discipline, type and root cause.</li>
+<li><strong>Map</strong> it to an existing rule, or propose a new one.</li>
+<li><strong>Validate:</strong> a senior engineer accepts, edits or rejects the rule.</li>
+<li><strong>Apply</strong> the rule to every live package for that utility.</li>
+<li><strong>Measure</strong> first-time-complete rate and comment rounds per utility.</li>
+</ol>
+</div>
+</div>
+</section>
+<section class="light" id="services">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Services</span><h2>One firm on the file, from first screening to energization.</h2><p>NewCo takes MV and HV load connections through each phase of the utility process, and stays on as engineer of record through detailed design, construction support and certified commissioning.</p></div>
+<div class="phase">
+<div class="phase-h"><h3>Before construction</h3><span>Screening, application, studies and comment rounds</span></div>
+<div class="svc">
+<div class="scard reveal"><div class="step">STEP 0</div><h3>Site and feasibility screening</h3><p>Where and how the site can connect before you commit: available capacity, the station and feeder that serve it, constraints and likely upgrades.</p><ul><li>Existing-conditions capture from as-builts, nameplates and bills</li><li>Options memo with risks</li></ul><span class="role own">NewCo owns</span></div>
+<div class="scard reveal"><div class="step">STEP 1</div><h3>Load sizing and concept design</h3><p>Demand calculation under the Ontario Electrical Safety Code and your growth plan, then service voltage and configuration.</p><ul><li>Load calculation and growth scenarios</li><li>Concept single-line and preliminary equipment sizing</li></ul><span class="role own">NewCo owns</span></div>
+<div class="scard reveal"><div class="step">STEP 2</div><h3>Utility application</h3><p>A complete connection request assembled against the utility's own checklist, sealed and submitted.</p><ul><li>Forms, single-line, site plan, equipment and protection data</li><li>Engineer's seal and portal submission</li></ul><span class="role own">NewCo owns</span></div>
+<div class="scard reveal"><div class="step">STEP 3</div><h3>Utility comment rounds</h3><p>We track the completeness review and technical comments, write the responses, revise drawings and calculations, and resubmit under the engineer's approval.</p><ul><li>Comment intake, classification and responses</li><li>Revisions with traced knock-on changes</li></ul><span class="role own">NewCo owns</span></div>
+<div class="scard reveal"><div class="step">STEPS 1, 4 &amp; 6</div><h3>Power system studies</h3><p>Studies run in the tools utilities already accept, with a model file the reviewer can open and rerun.</p><ul><li>Short circuit and load flow</li><li>Arc flash (CSA Z462) and protection coordination</li><li>Grounding (IEEE 80), motor starting and harmonics</li><li>Data and models for utility and IESO impact assessments</li></ul><span class="role sup">Studies for your design; we support the utility's studies</span></div>
+<div class="scard reveal"><div class="step">STEP 5</div><h3>Offer to connect: technical review</h3><p>We check the technical scope, ownership boundaries and cost drivers in the utility's offer, and advise on alternatives, including flexible connections.</p><ul><li>Offer and agreement schedule review</li><li>Options: accept, value-engineer, phase, flexible connection</li></ul><span class="role sup">NewCo supports; the owner negotiates and signs</span></div>
+</div>
+</div>
+<div class="phase">
+<div class="phase-h"><h3>Design, construction and commissioning</h3><span>Engineer of record through close-out</span></div>
+<div class="svc">
+<div class="scard reveal"><div class="step">STEP 6</div><h3>Detailed design at 30/60/90%</h3><p>Full design of the customer's facilities, issued in stages for review.</p><ul><li>Single-lines, three-lines, cable and equipment schedules</li><li>Substation physical layout and grounding</li><li>Protection and control, relay settings</li><li>Metering and SCADA</li></ul><span class="role own">NewCo owns</span></div>
+<div class="scard reveal"><div class="step">STEP 7</div><h3>Utility and ESA design approval</h3><p>ESA Electronic Plan Review submissions and responses, and utility review of protection settings, metering and interfaces.</p><ul><li>ESA plan review packaging and responses</li><li>Utility design review comment rounds</li></ul><span class="role own">NewCo owns the submission and responses</span></div>
+<div class="scard reveal"><div class="step">STEP 8</div><h3>Issued-for-construction and procurement support</h3><p>The sealed IFC set and specifications, plus technical review of what you buy.</p><ul><li>Equipment specifications and technical bid evaluation</li><li>Transformer and switchgear submittal review</li></ul><span class="role own">NewCo owns drawings and specs; you or your EPC buy</span></div>
+<div class="scard reveal"><div class="step">STEP 9</div><h3>Construction support</h3><p>Answers to contractor questions, field changes with an impact check, and as-built drawings.</p><ul><li>RFIs and change notices</li><li>As-builts from field redlines</li></ul><span class="role sup">NewCo supports; the EPC or contractor builds</span></div>
+<div class="scard reveal"><div class="step">STEPS 10–11</div><h3>Testing, commissioning and certification</h3><p>Commissioning plan, final relay settings and test sheets. We review field results against the design and issue the engineer-certified test report.</p><ul><li>Test report review</li><li>Certified report and ESA inspection support</li></ul><span class="role cert">NewCo reviews and certifies; test crews do the hands-on work</span></div>
+<div class="scard reveal"><div class="step">STEP 12</div><h3>Energization and close-out</h3><p>The utility connects and switches on. We coordinate, hand over records, and feed the outcome back into our rulebook.</p><ul><li>Records handover</li><li>Close-out</li></ul><span class="role sup">The utility energizes</span></div>
+</div>
+</div>
+<div class="notdo reveal"><h3>What NewCo doesn't do</h3><ul><li>Build, buy equipment or do the utility's grid-side work. Crews, equipment and grid-side work stay with contractors, suppliers and the utility.</li><li>Run the utility's or IESO's impact studies, or approve anything. Those belong to the utility, the IESO and ESA. We make them faster by sending complete, accurate inputs the first time.</li><li>Negotiate or sign the commercial agreement. That is the owner's decision; we give you the technical basis.</li></ul></div>
+</div>
+</section>
+
+<section class="char" id="who">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Who it's for</span><h2>Sites connecting or upgrading a medium- or high-voltage service.</h2><p>We start with upgrades to existing MV/HV services, the largest request type at Toronto Hydro, and take on new large-load connections with the same team.</p></div>
+<div class="who-grid">
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M3 28V14l7 4v-4l7 4v-4l7 4V6h5v22z"/><path d="M8 23h3M15 23h3M22 23h3"/></svg></div><h3>Industrial sites</h3><p>Electric furnaces, boilers, process heat and motors in manufacturing, mining and steel.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><rect x="4" y="5" width="13" height="22" rx="2"/><path d="M11 10l-3 6h5l-3 6"/><path d="M17 12h4a3 3 0 013 3v6a2 2 0 004 0V11l-3-3"/></svg></div><h3>EV and fleet depots</h3><p>Charging for buses, trucks and delivery fleets.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><rect x="5" y="4" width="22" height="7" rx="1.5"/><rect x="5" y="13" width="22" height="7" rx="1.5"/><rect x="5" y="22" width="22" height="6" rx="1.5"/><path d="M9 7.5h2M9 16.5h2M9 25h2"/></svg></div><h3>Data centres</h3><p>Large new loads with MV or HV service, often with transmission-level studies.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M6 28V6h12v22M18 12h8v16M3 28h26"/><path d="M10 10h4M10 14h4M10 18h4M10 22h4M21 16h2M21 20h2M21 24h2"/></svg></div><h3>Large commercial buildings</h3><p>Buildings and multi-site portfolios adding electrified heating and charging.</p></div>
+</div>
+<div class="buyers">
+<div class="bcard reveal"><h3>Owners and developers</h3><p>You pay for the connection, so every month of waiting leaves land, equipment and financing idle.</p></div>
+<div class="bcard reveal"><h3>EPCs and electrical contractors</h3><p>You need an engineer of record with capacity, and late utility comments mean redesign and idle crews.</p></div>
+<div class="bcard reveal"><h3>Multi-site owners and owner's engineers</h3><p>Owners with many sites (retail, seniors' residences, fleet depots) and large programmes that need repeatable packages.</p></div>
+</div>
+</div>
+</section>
+
+<section id="why">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Why an engineering firm, not software</span><h2>On the grid, the signature is the product.</h2><p>Owners and EPCs connecting MV and HV loads aren't shopping for a tool. They're buying a named engineer who takes responsibility for the design.</p></div>
+<div class="why">
+<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="10" r="6"/><path d="M9 10l2 2 4-4"/><path d="M8 15l-2 7 6-3 6 3-2-7"/></svg></div><div><h3>Signed results, not software output</h3><p>You receive engineer-sealed packages in the utility's own forms and formats. The firm that signs carries the professional responsibility, which is often why buyers outsource this work in the first place.</p></div></div>
+<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><div><h3>A fixed price per package</h3><p>Incumbent fees are fixed but scoped from hours, with extra comment rounds billed hourly. NewCo charges a fixed price per signed package with comment rounds included, so the time agents save becomes speed for you rather than billable hours.</p></div></div>
+<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.3 11l7.4-3.8M8.3 13l7.4 3.8"/></svg></div><div><h3>One accountable counterpart</h3><p>The problem is the handoffs between applicants, consultants and utilities. A firm doing the work removes handoffs that a tracking tool can only log, and the utility deals with one engineer of record.</p></div></div>
+<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg></div><div><h3>Capacity you can't hire fast enough</h3><p>A tool speeds up an existing engineer, but you still have to find and hire one. NewCo is the added capacity, and available capacity is often what decides who gets the work.</p></div></div>
+</div>
+</div>
+</section>
+
+<section class="dark" id="trust">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Trust and traceability</span><h2>No black boxes. Every number traces back to its inputs.</h2><p>Before signing AI-assisted work, an engineer needs a full trace of every input and assumption, results from standard tools, and the ability to rerun critical cases. That is how NewCo is built.</p></div>
+<div class="trust">
+<div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><circle cx="6" cy="8" r="3"/><circle cx="6" cy="24" r="3"/><circle cx="26" cy="16" r="3"/><path d="M9 8h6l8 7M9 24h6l8-7"/></svg><div><h3>Every number tied to its inputs</h3><p>An append-only ledger records every agent action and human decision. Each number in a sealed package carries its chain of inputs, assumptions, tool versions and model versions.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M26 16a10 10 0 11-3-7.1"/><path d="M26 5v6h-6"/></svg><div><h3>Models you can rerun in ETAP, PSS/E or PSCAD</h3><p>Studies run in the tools utilities already accept. Every study ships with a rerun bundle: the native model file, case settings and the script that reproduces each result.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M16 3l11 4v8c0 7-5 12-11 14C10 27 5 22 5 15V7z"/><path d="M11 16l3.5 3.5L21 13"/></svg><div><h3>An independent check before anything is filed</h3><p>The checker is separate from the agent that drafted the work, and deterministic rule checks run without any model at all. A model checking its own work is not a check.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><circle cx="16" cy="13" r="8"/><path d="M12 13l3 3 5-6"/><path d="M11 20l-2 9 7-3 7 3-2-9"/></svg><div><h3>The engineer holds the seal</h3><p>Packages are sealed by professional engineers licensed in Ontario (<a href="https://www.peo.on.ca/licence-holders/peng-seal" target="_blank" rel="noopener">PEO</a>) and Québec (<a href="https://www.oiq.qc.ca/membres/obligations-des-membres/votre-sceau-et-votre-signature-comme-ingenieur/" target="_blank" rel="noopener">OIQ</a>). PEO's digital signature must remain under the sole control of its holder (<a href="https://www.peo.on.ca/licence-holders/peo-digital-signature" target="_blank" rel="noopener">PEO</a>), so signing happens outside the agent system and no agent holds signing credentials.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><rect x="6" y="14" width="20" height="14" rx="2"/><path d="M11 14V9a5 5 0 0110 0v5"/></svg><div><h3>Your data stays controlled</h3><p>Enterprise model contracts with zero data retention and no training on your inputs, hosting and storage in a Canadian region, and isolation between clients, in line with the <a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ's guidance on responsible AI use</a>.</p></div></div>
+</div>
+<div class="trace reveal" role="figure" aria-label="Example calculation trace layout">
+<div class="th">Calculation trace <span>EXAMPLE LAYOUT</span></div>
+<div class="trow"><b>Value</b><div class="v">Available fault current at the main breaker</div></div>
+<div class="trow"><b>Inputs</b><div class="v"><div class="tnode"><i></i>Utility source data (record + hash)</div><div class="tnode"><i></i>Transformer nameplate</div><div class="tnode"><i></i>Single-line graph, revision</div></div></div>
+<div class="trow"><b>Tool</b><div class="v">Study tool, version, licence instance</div></div>
+<div class="trow"><b>Rerun</b><div class="v">Native model file · case settings · script</div></div>
+<div class="trow"><b>Originator</b><div class="v"><div class="tnode"><i></i>Studies agent (version)</div></div></div>
+<div class="trow"><b>Checker</b><div class="v"><div class="tnode"><i></i>Checker agent + rule checks</div></div></div>
+<div class="trow"><b>Reviewer</b><div class="v"><div class="tnode"><i class="r"></i>Discipline P.Eng, reason recorded</div></div></div>
+<div class="trow"><b>Approver</b><div class="v"><div class="tnode"><i class="r"></i>Engineer of record, seal</div></div></div>
+<p class="note">Illustrative structure of a trace entry: field names only, no project data.</p>
+</div>
+</div>
+<p class="src" style="margin-top:28px">Ontario and Québec allow AI-assisted work when a licensed engineer directs it and takes responsibility: <a href="https://www.peo.on.ca/node/8224" target="_blank" rel="noopener">PEO AI advisory</a>; <a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ guide</a>. In Québec, plans not prepared under the engineer's direction and immediate supervision cannot be sealed (<a href="https://gpp.oiq.qc.ca/Obligation_de_signer_et_sceller.htm" target="_blank" rel="noopener">OIQ</a>), which is why our engineer sets the design basis at the start, not only at the end.</p>
+</div>
+</section>
+<section class="char" id="heard">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">What we heard from the industry</span><h2>From practitioners on every side of the process.</h2><p>Verbatim from interviews with an EPC, a utility and a consulting engineer. The quotes describe the problem; they are not endorsements of NewCo.</p></div>
+<div class="quotes">
+<figure class="q wide reveal"><p>I don't want to, let's say, approve a black box kind of a study.</p><cite>- Haris Rashid, Pre-Construction Development Lead @ TruGrid</cite></figure>
+<figure class="q reveal"><p>We don't have like a centralized system that tells you where the bread is at. Is it in the oven? Is it out of the oven? Is it coming to your house?</p><cite>- Sheldon Pinto, Customer Connections Intake Manager @ Toronto Hydro</cite></figure>
+<figure class="q reveal"><p>Comments, they don't come back together, they actually come back in stages. Sometimes… they will reintroduce new requirements after previous comments have been closed.</p><cite>- Haris Rashid, Pre-Construction Development Lead @ TruGrid</cite></figure>
+<figure class="q reveal"><p>…customers go to consultants who are familiar with the utility, who are familiar with the requirements, who have done similar projects in the past.</p><cite>- Pritam Haldar, Co-owner @ GridWise Engineering (ex-BC Hydro)</cite></figure>
+<figure class="q reveal"><p>…you have a few number of engineers sitting down to do all the designs and everything required, but the number of requests coming in is substantially more.</p><cite>- Sheldon Pinto, Customer Connections Intake Manager @ Toronto Hydro</cite></figure>
+</div>
+</div>
+</section>
+
+<section class="light" id="utilities">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Utilities served</span><h2>Starting in Ontario, through each utility's own process.</h2><p>We prepare packages for each utility's intake channel and requirements. Utility names identify the connection processes we work with; they do not imply endorsement.</p></div>
+<div class="utils">
+<div class="ucard reveal"><span class="tag">Distribution · now</span><h3>Toronto Hydro</h3><p>Commercial new service and upgrade requests through the New Service Installation Request form, with site plan, drawings, permits and load calculations.</p><a href="https://www.torontohydro.com/for-business/service-connections/new-service-installation-request" target="_blank" rel="noopener">Toronto Hydro connection requests →</a></div>
+<div class="ucard reveal"><span class="tag">Distribution · now</span><h3>Alectra Utilities</h3><p>Commercial new service, upgrades and temporary service through the Alectra New Connections Portal.</p><a href="https://alectrautilities.com/make-service-request" target="_blank" rel="noopener">Alectra service requests →</a></div>
+<div class="ucard reveal"><span class="tag">Distribution · now</span><h3>Hydro One Distribution</h3><p>Online connection form, single-line and primary-fusing data, and the Large Customer process for loads of 2 MVA or more.</p><a href="https://www.hydroone.com/business-services/commercial-industrial-generators-and-ldcs/distribution-connections" target="_blank" rel="noopener">Hydro One distribution connections →</a></div>
+<div class="ucard reveal"><span class="tag">Large loads</span><h3>Hydro One Transmission and the IESO</h3><p>For new large loads: data and models for the Customer Impact Assessment and the IESO's System Impact Assessment. The utility and the IESO run the studies.</p><a href="https://www.ieso.ca/Sector-Participants/Connection-Process/Overview" target="_blank" rel="noopener">IESO connection process →</a></div>
+<div class="ucard reveal"><span class="tag">Inspection authority</span><h3>Electrical Safety Authority</h3><p>Electronic Plan Review for three-phase services of 400 A or more, feeders over 1,000 A and installations over 750 V.</p><a href="https://esasafe.com/electrical-plan-review/" target="_blank" rel="noopener">ESA plan review →</a></div>
+<div class="ucard next reveal"><span class="tag">Next</span><h3>More Ontario utilities, then Texas</h3><p>Further Ontario distributors, then the US, starting with Texas, where <a href="https://www.ercot.com/news/release/06182026-puct-approves-ercots" target="_blank" rel="noopener">ERCOT tracks more than 438 GW of large-load requests</a>. Generation and storage connections follow.</p></div>
+</div>
+<div class="umap reveal"><span class="pill">MV/HV load upgrades · Ontario</span><span class="arr">→</span><span class="pill">New large loads</span><span class="arr">→</span><span class="pill">United States</span><span class="arr">→</span><span class="pill">Generation and storage</span></div>
+</div>
+</section>
+
+<section id="compare">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Compare</span><h2>How NewCo differs from a traditional consultancy and from software tools.</h2></div>
+<div class="cmpwrap reveal" data-scrollx>
+<table class="cmp">
+<thead><tr><th scope="col"><span class="mute" style="font-weight:400">Approach</span></th><th scope="col" class="nc">NewCo</th><th scope="col">Traditional consultancy</th><th scope="col">Software tools</th></tr></thead>
+<tbody>
+<tr><th scope="row">What you receive</th><td data-label="NewCo" class="nc">Engineer-sealed packages, from screening to certified commissioning</td><td data-label="Traditional consultancy">Engineer-sealed packages</td><td data-label="Software tools">Analysis, reports or a platform; your engineer still prepares and signs</td></tr>
+<tr><th scope="row">Who signs and carries responsibility</th><td data-label="NewCo" class="nc">NewCo's licensed engineer of record</td><td data-label="Traditional consultancy">The consultancy's engineer of record</td><td data-label="Software tools">No seal; responsibility stays with the engineer who uses the tool</td></tr>
+<tr><th scope="row">Pricing</th><td data-label="NewCo" class="nc">Fixed price per signed package, comment rounds included</td><td data-label="Traditional consultancy">Fixed fees scoped from hours; extra comment rounds billed hourly</td><td data-label="Software tools">Subscription or per report, on top of engineering fees</td></tr>
+<tr><th scope="row">Capacity</th><td data-label="NewCo" class="nc">Agents do the drafting, checking and tracking, so each engineer can carry more packages</td><td data-label="Traditional consultancy">Limited by engineers available; firms report long backlogs</td><td data-label="Software tools">Speeds up an engineer you still have to hire</td></tr>
+<tr><th scope="row">Utility-specific requirements</th><td data-label="NewCo" class="nc">Per-utility rulebook, checked before filing and updated after every comment round</td><td data-label="Traditional consultancy">Held in individual engineers' experience</td><td data-label="Software tools">Can flag gaps, but can't stamp the fix or sit in the comment round</td></tr>
+<tr><th scope="row">Traceability</th><td data-label="NewCo" class="nc">Every number traced to its inputs; rerun bundles in ETAP, PSS/E or PSCAD</td><td data-label="Traditional consultancy">Model files and calculations, organized per firm practice</td><td data-label="Software tools">Varies by tool</td></tr>
+<tr><th scope="row">Coordination</th><td data-label="NewCo" class="nc">One owner of the file, one tracker, a client status portal</td><td data-label="Traditional consultancy">Email and phone between applicant, consultant and utility</td><td data-label="Software tools">Logs handoffs between parties; doesn't remove them</td></tr>
+</tbody>
+</table>
+</div>
+<p class="src" style="margin-top:14px">A general comparison of approaches, not of named firms or products.</p>
+</div>
+</section>
+
+<section class="light" id="pricing">
+<div class="wrap">
+<div class="price">
+<div class="reveal"><span class="eyebrow" style="color:var(--red)">Pricing</span><h2>A fixed price per signed package.</h2><p class="mute" style="font-size:18px">We quote each package from its scope: the utility, the request type, the service and the site's existing records. You know the fee before we start, and it doesn't grow with each comment round.</p>
+<ul class="pnotes"><li>Fixed fee per signed package, quoted per package</li><li>Utility comment rounds included</li><li>Billed on milestones: screen, application, design, close-out</li><li>Paid from the engineering budget you already have, with no software procurement</li></ul>
+<p style="margin-top:24px"><a class="btn" href="#contact">Request a connection assessment</a></p></div>
+<div class="pkgs reveal">
+<div class="pkg"><div><strong>Feasibility screen</strong><span>Capacity, constraints and options memo</span></div><em>Quoted per package</em></div>
+<div class="pkg"><div><strong>Application package</strong><span>Load calculation, concept design, sealed submission, comment rounds</span></div><em>Quoted per package</em></div>
+<div class="pkg"><div><strong>Studies package</strong><span>Short circuit, load flow, arc flash, coordination; utility and IESO study data</span></div><em>Quoted per package</em></div>
+<div class="pkg"><div><strong>Detailed design</strong><span>30/60/90% design, ESA and utility approval, IFC set</span></div><em>Quoted per package</em></div>
+<div class="pkg"><div><strong>Construction and commissioning</strong><span>RFIs, as-builts, test review and certified report</span></div><em>Quoted per package</em></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="faq">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">FAQ</span><h2>Common questions</h2></div>
+<div class="faq reveal">
+<details><summary>Is NewCo a software company?</summary><p>No. NewCo is an engineering firm. We sell finished, engineer-sealed engineering packages at a fixed price per package. AI agents are how we produce the work; the deliverable and the responsibility are an engineer's.</p></details>
+<details><summary>Who signs my package, and who is responsible for it?</summary><p>A licensed professional engineer who is NewCo's engineer of record for your project. They approve the design basis at kickoff, review the work and the checker's findings, approve the package at issue and apply the seal personally. Agents never hold signing credentials.</p></details>
+<details><summary>Is AI-assisted engineering allowed in Ontario and Québec?</summary><p>Yes, when a licensed engineer directs the work and takes responsibility for it. PEO holds engineers fully responsible for AI output (<a href="https://www.peo.on.ca/node/8224" target="_blank" rel="noopener">PEO AI advisory</a>), and the OIQ has published a guide on responsible AI use (<a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ guide</a>). In Québec, plans must be prepared under the engineer's direction and immediate supervision, so our engineer sets the design basis at the start and supervises through review as the work proceeds.</p></details>
+<details><summary>What does the utility receive?</summary><p>A standard engineer-sealed submission in the utility's own forms and formats, through its normal intake channel. The engineer of record answers for it like any other sealed package.</p></details>
+<details><summary>Which engineering software do you use?</summary><p>The tools utilities already accept: ETAP or SKM PowerTools for MV studies, arc flash and coordination; Siemens PSS/E for anything the IESO or a transmitter will review; PSCAD for transient studies when required; AutoCAD for drawings. We don't write our own solvers, and every study comes with a model file your reviewer can open and rerun.</p></details>
+<details><summary>Do you run the utility's impact studies?</summary><p>No. The utility and, for larger loads, the IESO run their impact assessments. We supply the data and models (for example PSS/E files where required) and answer their questions, so the inputs are complete the first time.</p></details>
+<details><summary>Do you build or supply equipment?</summary><p>No. NewCo does engineering, never physical construction. We write the specifications and review submittals; you or your EPC buy the equipment, and contractors and the utility do the physical work.</p></details>
+<details><summary>How do you handle our drawings and data?</summary><p>Enterprise model contracts with zero data retention and no training on inputs, hosting and storage in a Canadian region, and isolation between clients. Utility system data supplied under NDA is handled under the utility's terms.</p></details>
+<details><summary>How is the price set?</summary><p>A fixed price per package, quoted from the package's scope: the utility, request type, service and site records. Comment rounds are included, and billing follows milestones.</p></details>
+<details><summary>Do you work on generation and storage connections?</summary><p>We start with load connections. Generation and storage connections go through the same engineering steps and are our next service area.</p></details>
+</div>
+</div>
+</section>
+
+<section class="dark" id="about">
+<div class="wrap about">
+<div class="reveal"><span class="eyebrow">About NewCo</span><h2>Our mission: get electrified load onto the grid sooner.</h2>
+<p class="big">Canada can't decarbonize without connecting new electric load, and every one of those connections has to be engineered first.</p>
+<p>The main way to cut emissions from transport, buildings and heavy industry is to switch to electricity: EV fleets and charging depots, heat pumps, and electric furnaces and boilers in steel, mining and manufacturing. Almost all of that new load comes through MV and HV connections or upgrades, and until one is approved, the site keeps burning diesel or gas. NewCo exists to shorten the engineering part of that wait.</p>
+<p>We serve data centres too, but our climate case rests on electrified industry, fleets and buildings, and next on clean generation and storage. We measure it in months saved from application to energization.</p></div>
+<div class="cstats">
+<div class="cs reveal"><div class="n">~45%</div><p>of Canada's emissions come from transport, buildings and heavy industry (309 of 685 Mt).</p><div class="src">Source: <a href="https://www.canada.ca/en/environment-climate-change/services/climate-change/greenhouse-gas-emissions/sources-sinks-executive-summary-2026.html" target="_blank" rel="noopener">Environment and Climate Change Canada</a></div></div>
+<div class="cs reveal"><div class="n">2×+</div><p>Canada's electricity use more than doubles by 2050 in the Canada Energy Regulator's net-zero scenarios.</p><div class="src">Source: <a href="https://www.cer-rec.gc.ca/en/data-analysis/canada-energy-future/2023/executive-summary/index.html" target="_blank" rel="noopener">Canada Energy Regulator, Canada's Energy Future 2023</a></div></div>
+<div class="cs reveal"><div class="n">~13%</div><p>of US capacity that applied to connect from 2000 to 2020 was ever built: the backlog our generation and storage work will address.</p><div class="src">Source: <a href="https://eta-publications.lbl.gov/sites/default/files/2026-06/queued_up_2026_edition.pdf" target="_blank" rel="noopener">LBNL, Queued Up 2026</a></div></div>
+</div>
+</div>
+</section>
+
+<section class="light" id="contact">
+<div class="wrap contact">
+<div class="reveal"><span class="eyebrow" style="color:var(--red)">Contact</span><h2>Request a connection assessment</h2><p class="mute" style="font-size:17px">Tell us about the site and the connection. An engineer will review it and reply with a proposed scope and a fixed price for the first package.</p>
+<ul class="cinfo">
+<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0114 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Ontario first: Toronto Hydro, Alectra and Hydro One service territories</span></li>
+<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg><span>Useful to have: site address, existing single-line or as-builts, recent bills or interval data, and your target load and date</span></li>
+<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>Every assessment is reviewed by a licensed engineer</span></li>
+</ul></div>
+<form id="cform" class="reveal" novalidate>
+<label>Full name<input name="name" required autocomplete="name"><span class="err"></span></label>
+<label>Company<input name="company" required autocomplete="organization"><span class="err"></span></label>
+<label>Work email<input type="email" name="email" required autocomplete="email"><span class="err"></span></label>
+<label>Your role<select name="role"><option>Owner or developer</option><option>EPC or electrical contractor</option><option>Owner's engineer</option><option>Facilities or energy manager</option><option>Other</option></select></label>
+<label>Utility<select name="utility"><option>Toronto Hydro</option><option>Alectra Utilities</option><option>Hydro One Distribution</option><option>Hydro One Transmission</option><option>Other Ontario utility</option><option>Outside Ontario</option><option>Not sure</option></select></label>
+<label>Request type<select name="type"><option>Upgrade to an existing service</option><option>New MV/HV service</option><option>New large load</option><option>Feasibility screen only</option><option>Other</option></select></label>
+<label>Facility type<select name="facility"><option>Industrial site</option><option>EV or fleet depot</option><option>Data centre</option><option>Large commercial building</option><option>Other</option></select></label>
+<label>Target load or service size (optional)<input name="load" placeholder="e.g. kVA, MW or amperes"></label>
+<label class="full">Project details<textarea name="msg" placeholder="Site location, current service, what you're adding and when you need it"></textarea></label>
+<label class="chk full"><input type="checkbox" name="consent" required> I agree that NewCo may contact me about this request.</label>
+<div class="full"><button class="btn" type="submit">Request a connection assessment</button></div>
+<div class="formmsg" id="formmsg" role="status">Thank you. Your request has been noted. (This form is a front-end demo; no data was sent.)</div>
+</form>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="wrap">
+<div class="fgrid">
+<div><a class="logo" href="#hero" style="padding:0;margin-bottom:12px"><svg width="26" height="26" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="6" fill="#8b1a1a"/><path d="M7 22V8l8 9 8-9v14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="15" cy="17" r="1.8" fill="#fff"/></svg>NewCo</a><p style="margin:0;max-width:320px">An engineering firm for medium- and high-voltage grid connections. AI agents draft, check and track; licensed engineers sign.</p></div>
+<div><h4>Firm</h4><a href="#how">How it works</a><a href="#why">Why an engineering firm</a><a href="#trust">Trust and traceability</a><a href="#about">About</a></div>
+<div><h4>Services</h4><a href="#services">By connection phase</a><a href="#who">Who it's for</a><a href="#utilities">Utilities served</a><a href="#pricing">Pricing</a></div>
+<div><h4>Get started</h4><a href="#contact">Request a connection assessment</a><a href="#faq">FAQ</a><a href="#compare">Compare</a><a href="#hero">Back to top</a></div>
+</div>
+<div class="fbot"><span>© 2026 NewCo. Engineering services only; NewCo does not perform construction.</span><span>Concept website prepared for research purposes.</span></div>
+</div>
+</footer>
+<script>
+const bg=document.getElementById('burger'),mn=document.getElementById('mnav');
+bg.onclick=()=>{const o=mn.classList.toggle('open');bg.setAttribute('aria-expanded',o)};
+mn.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mn.classList.remove('open');bg.setAttribute('aria-expanded',false)}));
+const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'}):null;
+document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'));
+const navA=[...mn.querySelectorAll('a')],tg=navA.map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{const y=scrollY+120;let c=null;tg.forEach((s,i)=>{if(s.offsetTop<=y)c=i});navA.forEach((a,i)=>a.classList.toggle('active',i===c))},{passive:true});
+const f=document.getElementById('cform');
+f.addEventListener('submit',e=>{e.preventDefault();let ok=true;
+f.querySelectorAll('[required]').forEach(i=>{const er=i.parentElement.querySelector('.err');let m='';
+if(i.type==='checkbox'){if(!i.checked)m='x'}else if(!i.value.trim())m='Required.';else if(i.type==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(i.value))m='Enter a valid email address.';
+if(er)er.textContent=m;if(i.type==='checkbox')i.parentElement.style.color=m?'#b02a2a':'';if(m)ok=false});
+if(ok){document.getElementById('formmsg').classList.add('show');f.querySelector('button[type=submit]').disabled=true}});
+</script>
+</body>
+</html>
