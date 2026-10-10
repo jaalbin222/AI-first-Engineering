@@ -1,251 +1,503 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NewCo · MV/HV grid connection engineering, engineer-sealed</title>
-<meta name="description" content="NewCo is an engineering firm for medium- and high-voltage load connections. AI agents draft, check and track every package; licensed professional engineers review, approve, seal and stay engineer of record through commissioning.">
+<title>Pylon · MV/HV grid connection engineering, engineer-sealed</title>
+<meta name="description" content="Pylon is an engineering firm for medium- and high-voltage load connections. AI agents draft, check and track every package; licensed professional engineers review, approve and seal it.">
+<meta name="theme-color" content="#04080f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect width='30' height='30' rx='7' fill='%23a3202a'/%3E%3Cpath d='M10 24L15 6l5 18M9 11h12M7.5 15h15M12 19.5h6M12.6 15l4.8 4.5M17.4 15l-4.8 4.5' fill='none' stroke='%23fff' stroke-width='1.9' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0b1626;--navy2:#111f35;--char:#1a2230;--ink:#1b2331;--mute:#5d6878;--line:#e3e7ed;--bg:#f5f6f8;--red:#8b1a1a;--red2:#b02a2a;--redl:#f8eaea;--dline:#24344e;--dtext:#c3ccda;--dmute:#8693a8}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}
-body{margin:0;font-family:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased}
-a{color:var(--red)}img,svg{max-width:100%}
-.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
-.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:8px;z-index:100}
-.hdr{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(11,22,38,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
-.hdr .wrap{display:flex;align-items:center;height:68px;gap:24px}
-.logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:19px;letter-spacing:.2px}
+:root{--bg:#04080f;--bg2:#070d18;--surf:#0b1424;--glass:rgba(14,25,44,.62);--glass2:rgba(20,35,60,.5);--gb:rgba(140,175,225,.13);--gb2:rgba(140,175,225,.22);--line:rgba(140,175,225,.11);
+--ink:#dbe3ee;--hd:#f3f6fb;--mute:#8d9ab0;--dim:#5d6a80;--red:#a3202a;--red2:#d23c44;--redt:#ff7a80;--glow:rgba(226,64,72,.45);--acc:#7fb6ff;--acc2:#4f8fe6;--ok:#2fb57d;--okt:#5fe0a6;--warn:#c98d1f;--warnt:#f3c46b;--es:#a99cff}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px;background:var(--bg)}
+body{margin:0;font-family:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--acc)}img,svg{max-width:100%}
+::selection{background:rgba(210,60,68,.35)}
+.mono{font-family:"Roboto Mono",ui-monospace,monospace}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px;position:relative}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:200;background:#fff;color:#000;padding:8px 12px}
+/* header */
+.hdr{position:sticky;top:0;z-index:80;background:rgba(5,9,16,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--gb)}
+.hdr .wrap{display:flex;align-items:center;gap:18px;height:64px;max-width:1320px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.4px;white-space:nowrap}
+.logo svg{filter:drop-shadow(0 0 10px rgba(226,64,72,.45))}
 .mnav{display:flex;gap:2px;margin-left:auto}
-.mnav a{color:var(--dtext);text-decoration:none;font-size:14px;padding:8px 10px;border-radius:6px}
-.mnav a:hover,.mnav a.active{color:#fff;background:rgba(255,255,255,.07)}
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;text-decoration:none;font-weight:500;padding:12px 20px;border-radius:6px;font-size:15px;border:1px solid var(--red);transition:background .15s,transform .15s;cursor:pointer;font-family:inherit}
-.btn:hover{background:var(--red2);transform:translateY(-1px);color:#fff}
-.btn:disabled{opacity:.6;cursor:default;transform:none}
-.btn.sm{padding:9px 14px;font-size:14px;white-space:nowrap}
-.btn.ghost{background:transparent;border-color:rgba(255,255,255,.28);color:#fff}.btn.ghost:hover{border-color:#fff;background:rgba(255,255,255,.05)}
-.burger{display:none;margin-left:auto;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;padding:8px 10px;cursor:pointer}
-.hero{background:radial-gradient(1200px 600px at 80% 20%,#1a2c4a 0%,var(--navy) 60%);color:#fff;padding:140px 0 70px;position:relative;overflow:hidden}
-.hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e9a9a9;font-weight:500}
-.eyebrow:before{content:"";width:22px;height:2px;background:var(--red2)}
-.hero h1{font-size:52px;line-height:1.08;margin:16px 0 20px;font-weight:700;letter-spacing:-.5px}
-.hero h1 em{font-style:normal;color:#f1b9b9}
-.hero .lede{font-size:18px;color:var(--dtext);max-width:580px;margin:0 0 28px}
-.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
-.hero .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;padding-top:24px;border-top:1px solid var(--dline)}
-.hero .facts div{font-size:13px;color:var(--dmute);max-width:200px}.hero .facts strong{display:block;color:#fff;font-size:15px;font-weight:500;margin-bottom:2px}
-.sld{width:100%;height:auto;display:block}
-.sld .wire{stroke:#3b5276;stroke-width:2;fill:none}
-.sld .live{stroke:var(--red2);stroke-width:2.5;fill:none;stroke-dasharray:6 10;animation:flow 1.6s linear infinite}
-@keyframes flow{to{stroke-dashoffset:-32}}
-.sld text{fill:#9fb0c8;font-family:"Roboto Mono",monospace;font-size:11px}
-.sld .lbl{fill:#fff;font-family:Roboto,sans-serif;font-size:12px;font-weight:500}
-.sld .box{fill:#111f35;stroke:#3b5276;stroke-width:1.5}
-.sld .seal{fill:var(--red)}
-.gridbg{position:absolute;inset:0;opacity:.35;pointer-events:none}
-section{padding:96px 0}
-.dark{background:var(--navy);color:#fff}.dark p{color:var(--dtext)}
-.char{background:var(--char);color:#fff}.char p{color:var(--dtext)}
-.light{background:var(--bg)}
-.sh{max-width:780px;margin-bottom:48px}
-.sh .eyebrow{color:var(--red)}.dark .sh .eyebrow,.char .sh .eyebrow,.dark .eyebrow{color:#e9a9a9}
-h2{font-size:38px;line-height:1.15;margin:12px 0 16px;letter-spacing:-.3px}
-h3{font-size:20px;margin:0 0 8px;line-height:1.3}
-.sh p{font-size:18px;color:var(--mute);margin:0}.dark .sh p,.char .sh p{color:var(--dtext)}
-.mute{color:var(--mute)}
-.src{font-size:12.5px;color:var(--mute)}.dark .src,.char .src{color:var(--dmute)}.dark .src a,.char .src a,.dark p a{color:#e9a9a9}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px;display:flex;flex-direction:column}
-.stat .n{font-size:44px;font-weight:700;color:var(--navy);line-height:1;letter-spacing:-1px}
-.stat .n small{font-size:20px;font-weight:500;letter-spacing:0}
-.stat p{margin:12px 0 14px;color:var(--ink)}
-.stat .src{margin-top:auto;padding-top:10px;border-top:1px solid var(--line)}
-.stat.feature{grid-column:span 2;background:var(--navy);color:#fff;border-color:var(--navy)}
-.stat.feature .n{color:#fff}.stat.feature p{color:var(--dtext)}.stat.feature .src{border-color:var(--dline);color:var(--dmute)}.stat.feature .src a{color:#e9a9a9}
-.tbar{display:flex;margin:6px 0 8px;border-radius:6px;overflow:hidden;min-height:46px;font-size:13px}
-.tbar div{display:flex;align-items:center;padding:6px 14px;line-height:1.3}
-.tbar .a{flex:1;background:var(--red);color:#fff}.tbar .b{flex:1;background:#2a3d5c;color:#d5ddea}
-.tlab{display:flex;justify-content:space-between;font-size:12px;color:var(--dmute);margin-bottom:14px}
-.causes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
-.cause{border-top:3px solid var(--red);padding-top:18px}
-.cause .ic{width:44px;height:44px;border-radius:10px;background:var(--redl);display:grid;place-items:center;margin-bottom:14px}
-.cause p{color:var(--mute);margin:0 0 10px;font-size:15px}
-blockquote.oeb{margin:48px 0 0;padding:26px 30px;background:#fff;border-left:4px solid var(--red);border-radius:6px;font-size:21px;line-height:1.45;color:var(--navy);font-weight:300}
-blockquote.oeb cite{display:block;font-size:13px;color:var(--mute);font-style:normal;margin-top:10px;font-weight:400}
-.how{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.hcard{background:var(--navy2);border:1px solid var(--dline);border-radius:12px;padding:28px}
-.hcard .k{font-family:"Roboto Mono",monospace;font-size:12px;color:#e9a9a9;margin-bottom:12px}
-.hcard ul{margin:12px 0 0;padding-left:18px;color:var(--dtext);font-size:14.5px}.hcard li{margin-bottom:6px}
-.hcard.hu{border-color:#5a2a33;background:linear-gradient(180deg,#2a1820,#1b1622)}
-.ocra{margin-top:56px;background:var(--navy2);border:1px solid var(--dline);border-radius:14px;padding:30px}
-.ocra-row{display:grid;grid-template-columns:repeat(4,1fr);position:relative;margin-top:22px}
-.ostep{padding:0 16px;position:relative;text-align:center}
-.ostep .dot{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-weight:700;font-size:22px;position:relative;z-index:2}
-.ostep.ai .dot{background:#1f3a5f;color:#cfe0f5;border:2px solid #3c6496}
-.ostep.hu .dot{background:var(--red);color:#fff;border:2px solid #d45a5a}
-.ostep h3{color:#fff;font-size:18px;margin-bottom:4px}.ostep .who{font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-.ostep.ai .who{color:#8fb3de}.ostep.hu .who{color:#f0a9a9}
-.ostep p{font-size:14px;margin:0}
-.ocra-line{position:absolute;top:32px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,#3c6496 0 50%,var(--red2) 50% 100%);z-index:1}
-.ocra-split{display:grid;grid-template-columns:1fr 1fr;margin-top:24px;font-size:12px;letter-spacing:1px;text-transform:uppercase;text-align:center}
-.ocra-split span{padding:8px;border-radius:6px 0 0 6px;background:rgba(60,100,150,.18);color:#8fb3de}.ocra-split span+span{border-radius:0 6px 6px 0;background:rgba(176,42,42,.18);color:#f0a9a9}
-.loop{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:center;margin-top:56px}
-.loop ol{list-style:none;padding:0;margin:0;counter-reset:l}
-.loop li{counter-increment:l;padding:10px 0 10px 44px;position:relative;border-bottom:1px solid var(--dline);color:var(--dtext);font-size:15px}
-.loop li:before{content:counter(l);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:50%;border:1px solid #e9a9a9;color:#e9a9a9;font-size:13px;display:grid;place-items:center}
-.loop li strong{color:#fff;font-weight:500}
-.phase{margin-bottom:44px}
-.phase-h{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap}
-.phase-h h3{font-size:22px;margin:0;color:var(--navy)}.phase-h span{color:var(--mute);font-size:14px}
-.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.scard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px;position:relative;transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column}
-.scard:hover{box-shadow:0 10px 28px rgba(11,22,38,.08);transform:translateY(-2px)}
-.scard .step{font-family:"Roboto Mono",monospace;font-size:12px;color:var(--mute)}
-.scard h3{margin:6px 0 8px;font-size:18px;color:var(--navy)}
-.scard p{font-size:14.5px;color:var(--mute);margin:0 0 12px}
-.scard ul{font-size:14px;color:var(--ink);padding-left:18px;margin:0 0 14px}
-.role{margin-top:auto;display:inline-block;align-self:flex-start;font-size:12px;font-weight:500;padding:3px 10px;border-radius:999px}
-.role.own{background:var(--red);color:#fff}.role.sup{background:#e6ebf2;color:#2c4566}.role.cert{background:#f3e7cf;color:#7a5200}
-.notdo{background:#fff;border:1px dashed #c7ced8;border-radius:10px;padding:22px 26px;display:grid;grid-template-columns:220px 1fr;gap:20px}
-.notdo h3{color:var(--navy)}
-.notdo ul{margin:0;padding-left:18px;color:var(--mute);font-size:15px}
-.who-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.wcard{border:1px solid var(--dline);border-radius:12px;padding:24px;background:var(--navy2)}
-.wcard .ic{margin-bottom:16px}
-.wcard h3{color:#fff;font-size:18px}.wcard p{font-size:14.5px;margin:0}
-.buyers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
-.bcard{border-left:3px solid var(--red2);padding:6px 0 6px 18px}
-.bcard h3{color:#fff;font-size:17px}.bcard p{font-size:14.5px;margin:0}
-.why{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.wy{display:flex;gap:18px;padding:26px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.wy .ic{flex:none;width:48px;height:48px;border-radius:10px;background:var(--navy);display:grid;place-items:center}
-.wy h3{color:var(--navy)}.wy p{margin:0;color:var(--mute);font-size:15px}
-.trust{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
-.ti{display:grid;grid-template-columns:40px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--dline)}
-.ti h3{color:#fff;font-size:17px;margin-bottom:4px}.ti p{font-size:14.5px;margin:0}
-.trace{background:#0d1a2c;border:1px solid var(--dline);border-radius:12px;padding:20px;font-family:"Roboto Mono",monospace;font-size:12.5px;color:#a9b8cc;position:sticky;top:90px}
-.trace .th{display:flex;justify-content:space-between;color:#fff;font-family:Roboto,sans-serif;font-size:14px;font-weight:500;margin-bottom:14px}
-.trace .th span{font-size:11px;color:#e9a9a9;border:1px solid #5a2a33;border-radius:4px;padding:1px 6px;font-family:"Roboto Mono",monospace}
-.trow{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:7px 0;border-top:1px dashed #22324a}
-.trow b{color:#7f93ae;font-weight:400}.trow .v{color:#dbe3ee}
-.tnode{display:flex;align-items:center;gap:8px}.tnode i{width:8px;height:8px;border-radius:50%;background:#3c6496;display:inline-block;flex:none}.tnode i.r{background:var(--red2)}
-.trace .note{font-family:Roboto,sans-serif;font-size:11.5px;color:var(--dmute);margin:12px 0 0}
-.utils{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.ucard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px}
-.ucard .tag{display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--red);margin-bottom:6px}
-.ucard.next .tag{color:var(--mute)}
-.ucard h3{color:var(--navy);font-size:18px}.ucard p{font-size:14.5px;color:var(--mute);margin:0 0 10px}
-.ucard a{font-size:14px}
-.umap{margin-top:28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--mute)}
-.umap .pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;color:var(--ink)}
-.umap .arr{color:var(--red)}
-.cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:15px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-.cmp th,.cmp td{padding:16px 18px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
-.cmp thead th{background:#eef1f5;color:var(--navy);font-size:14px;font-weight:700}
-.cmp thead th.nc{background:var(--navy);color:#fff;position:relative}
-.cmp thead th.nc:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--red2)}
-.cmp td.nc{background:#fbf6f6;color:var(--ink);font-weight:500}
-.cmp tbody th{font-weight:500;color:var(--navy);width:20%;background:#fafbfc}
-.cmp tr:last-child td,.cmp tr:last-child th{border-bottom:0}
-.cmpwrap{overflow-x:auto;border-radius:12px}
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.q{background:var(--navy2);border:1px solid var(--dline);border-radius:12px;padding:26px;display:flex;flex-direction:column;margin:0}
-.q p{color:#fff;font-size:17px;line-height:1.5;font-weight:300;margin:0 0 18px}
-.q p:before{content:"\201C";color:var(--red2);font-size:44px;line-height:0;vertical-align:-16px;margin-right:4px;font-weight:700}
-.q cite{font-style:normal;font-size:13px;color:var(--dmute);margin-top:auto}
-.q.wide{grid-column:span 2}.q.wide p{font-size:24px}
-.price{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-.pkgs{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
-.pkg{display:flex;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);align-items:center}
-.pkg:last-child{border-bottom:0}
-.pkg strong{color:var(--navy);font-weight:500}.pkg span{font-size:13px;color:var(--mute);display:block}
-.pkg em{font-style:normal;font-size:13px;font-weight:500;color:var(--red);white-space:nowrap;border:1px solid #e6c4c4;border-radius:999px;padding:3px 10px}
-.pnotes{list-style:none;padding:0;margin:20px 0 0}.pnotes li{padding:10px 0 10px 32px;position:relative;border-bottom:1px solid var(--line);font-size:15px}
-.pnotes li:before{content:"";position:absolute;left:6px;top:16px;width:11px;height:6px;border-left:2px solid var(--red);border-bottom:2px solid var(--red);transform:rotate(-45deg)}
-.faq{max-width:880px}
-.faq details{border-bottom:1px solid var(--line)}
-.faq summary{cursor:pointer;list-style:none;padding:20px 40px 20px 0;font-size:17px;font-weight:500;color:var(--navy);position:relative}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary:after{content:"";position:absolute;right:8px;top:26px;width:10px;height:10px;border-right:2px solid var(--red);border-bottom:2px solid var(--red);transform:rotate(45deg);transition:transform .2s}
-.faq details[open] summary:after{transform:rotate(225deg);top:30px}
-.faq details p{margin:0 0 20px;color:var(--mute)}
-.about{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.about .big{font-size:28px;line-height:1.35;color:#fff;font-weight:300;margin:0 0 20px}
-.cstats{display:grid;gap:14px}
-.cs{border:1px solid var(--dline);border-radius:10px;padding:20px;background:var(--navy2)}
-.cs .n{font-size:32px;font-weight:700;color:#fff;line-height:1}.cs p{margin:8px 0 6px;font-size:14.5px}
-.contact{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px}
-form{background:#fff;border:1px solid var(--line);border-radius:12px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
-label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:var(--navy)}
-input,select,textarea{font:inherit;font-size:15px;padding:11px 12px;border:1px solid #cdd3dc;border-radius:6px;background:#fff;color:var(--ink);width:100%}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--red);outline-offset:0;border-color:var(--red)}
-.full{grid-column:1/-1}textarea{min-height:110px;resize:vertical}
-.chk{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400;color:var(--mute)}.chk input{width:auto;margin-top:4px}
-.formmsg{grid-column:1/-1;display:none;background:#eaf5ee;border:1px solid #bfe0cb;color:#1f6b42;border-radius:6px;padding:12px 14px;font-size:14px}
-.formmsg.show{display:block}
-.err{color:var(--red2);font-size:12px;font-weight:400}.err:empty{display:none}
-.cinfo{list-style:none;padding:0;margin:24px 0 0}.cinfo li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}.cinfo svg{flex:none;margin-top:2px}
-footer{background:#070f1b;color:var(--dmute);padding:56px 0 30px;font-size:14px}
-.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
-footer h4{color:#fff;font-size:14px;margin:0 0 12px;font-weight:500}
-footer a{color:var(--dtext);text-decoration:none;display:block;padding:3px 0}footer a:hover{color:#fff}
-.fbot{border-top:1px solid #1a2639;margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12.5px}
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.mnav a{color:var(--mute);text-decoration:none;font-size:13.5px;padding:7px 10px;border-radius:8px;white-space:nowrap;transition:color .15s,background .15s}
+.mnav a:hover{color:#fff;background:rgba(255,255,255,.05)}.mnav a.active{color:#fff;background:rgba(210,60,68,.16)}
+.hdr .cta2{display:flex;gap:8px;align-items:center}
+.burger{display:none;background:rgba(255,255,255,.05);border:1px solid var(--gb2);border-radius:8px;width:40px;height:38px;cursor:pointer;place-items:center}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(180deg,#c22f38,#9a1f28);color:#fff;text-decoration:none;font-weight:500;padding:12px 20px;border-radius:10px;font-size:15px;border:1px solid rgba(255,120,125,.4);cursor:pointer;transition:all .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);white-space:nowrap;font-family:inherit}
+.btn:hover{box-shadow:0 0 24px var(--glow),inset 0 1px 0 rgba(255,255,255,.2);transform:translateY(-1px)}
+.btn.ghost{background:rgba(255,255,255,.04);border-color:var(--gb2);box-shadow:none}.btn.ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(160,195,240,.4)}
+.btn.sm{padding:8px 14px;font-size:13.5px;border-radius:9px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.ext{font-size:11px;opacity:.8}
+/* sections */
+section{position:relative;padding:104px 0}
+.sec-alt{background:linear-gradient(180deg,rgba(11,20,36,.55),rgba(4,8,15,0))}
+.sec-line{border-top:1px solid var(--gb)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;color:#ff9a9e;font-weight:500;font-family:"Roboto Mono",monospace}
+.eyebrow:before{content:"";width:24px;height:1px;background:var(--red2);box-shadow:0 0 8px var(--glow)}
+h1,h2,h3{color:var(--hd);font-weight:500}
+h2{font-size:42px;line-height:1.1;letter-spacing:-1px;margin:14px 0 14px}
+h3{font-size:18px;line-height:1.3;margin:0 0 8px}
+.sh{max-width:820px;margin-bottom:44px}.sh p{color:var(--mute);font-size:17.5px;margin:0}
+.grad{background:linear-gradient(90deg,#ff7a80,#ffb3b6 45%,#a9ccff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.src{font-size:12.5px;color:var(--dim);margin-top:10px}.src a{color:#9fb8d8}
+.card,.gl{background:linear-gradient(180deg,rgba(18,32,56,.6),rgba(10,18,32,.55));border:1px solid var(--gb);border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 16px 40px rgba(0,0,0,.25);position:relative}
+.card{padding:24px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.card:hover{border-color:rgba(255,120,125,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 20px 50px rgba(0,0,0,.35),0 0 30px rgba(226,64,72,.08)}
+.card p{color:var(--mute);margin:0;font-size:15px}
+.hl:before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(255,110,115,.55),transparent 35%,transparent 65%,rgba(127,182,255,.4));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.tagm{font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim)}
+.sample{display:inline-block;background:rgba(240,180,76,.12);color:#f3cf8a;border:1px solid rgba(240,180,76,.35);border-radius:5px;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;padding:2px 7px;font-weight:700;white-space:nowrap;font-family:"Roboto Mono",monospace}
+/* reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
 .reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.sld .live{animation:none}html{scroll-behavior:auto}}
-@media (max-width:1180px){.mnav a{padding:8px 6px;font-size:13px}.hdr .wrap{gap:14px}}
-@media (max-width:1040px){
-.mnav{display:none;position:absolute;top:68px;left:0;right:0;background:var(--navy);flex-direction:column;padding:10px 20px 20px;border-bottom:1px solid var(--dline)}
-.mnav.open{display:flex}.mnav a{font-size:16px;padding:12px 8px}
-.burger{display:block}.hdr .btn.sm{display:none}
-.hero .grid,.trust,.loop,.price,.about,.contact{grid-template-columns:1fr}
-.stats,.how,.svc,.quotes,.utils,.who-grid{grid-template-columns:1fr 1fr}
-.trace{position:static}}
-@media (max-width:640px){
-.wrap{padding:0 20px}section{padding:68px 0}
-.hero{padding:108px 0 50px}.hero h1{font-size:36px}.hero .lede{font-size:16px}
-h2{font-size:28px}.sh p{font-size:16px}.sh{margin-bottom:32px}
-.stats,.how,.svc,.quotes,.utils,.who-grid,.buyers,.why,.causes{grid-template-columns:1fr}
-.stat.feature,.q.wide{grid-column:auto}.stat .n{font-size:36px}.q.wide p{font-size:19px}
-.ocra{padding:22px}.ocra-row{grid-template-columns:1fr;gap:22px}.ocra-line{display:none}
-.ostep{display:grid;grid-template-columns:56px 1fr;text-align:left;gap:0 14px;padding:0}.ostep .dot{width:52px;height:52px;margin:0;grid-row:span 3;font-size:18px}
-.ocra-split{font-size:10px}
-.notdo{grid-template-columns:1fr}form{grid-template-columns:1fr;padding:20px}
+/* hero */
+.hero{padding:0;min-height:calc(100vh - 64px);display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--gb)}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(800px 500px at 15% 10%,rgba(79,143,230,.14),transparent 60%),radial-gradient(800px 600px at 85% 30%,rgba(210,60,68,.14),transparent 60%),linear-gradient(180deg,transparent 70%,var(--bg))}
+.hero .wrap{z-index:2;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center;padding-top:64px;padding-bottom:72px;max-width:1280px}
+.hero h1{font-size:62px;line-height:1.02;letter-spacing:-2px;margin:18px 0 20px}
+.lede{font-size:18.5px;color:var(--ink);opacity:.85;max-width:600px;margin:0 0 28px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:36px;max-width:640px}
+.facts div{border:1px solid var(--gb);border-radius:12px;padding:12px 14px;background:rgba(255,255,255,.025);font-size:13px;color:var(--mute)}
+.facts strong{display:block;color:#fff;font-weight:500;font-size:14.5px;margin-bottom:2px}
+.heroviz{position:relative}
+.heroviz .gl{padding:18px 18px 14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.vizh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.sldh{width:100%;height:auto;display:block}
+.sldh text{font-family:"Roboto Mono",monospace;font-size:10.5px;fill:#8fa8c8}
+.sldh .lbl{fill:#e6eefa;font-family:Roboto,sans-serif;font-size:12.5px;font-weight:500}
+.sldh .w{stroke:rgba(159,194,234,.35);stroke-width:2;fill:none}
+.sldh .flow{stroke:#7fb6ff;stroke-width:2.2;fill:none;stroke-dasharray:6 14;animation:flow 1.2s linear infinite;filter:drop-shadow(0 0 4px #7fb6ff)}
+.sldh .flow.r{stroke:#ff8a90;filter:drop-shadow(0 0 4px #ff6b72)}
+@keyframes flow{to{stroke-dashoffset:-20}}
+.sldh .eq{fill:#06111f;stroke:#9fc2ea;stroke-width:1.8}
+.sldh .bus{stroke:#cfe0ff;stroke-width:5;filter:drop-shadow(0 0 6px rgba(127,182,255,.6))}
+.sldh .ld{fill:rgba(14,25,44,.85);stroke:rgba(127,182,255,.35)}
+.sldh .ldg{animation:ldg 3.6s ease-in-out infinite}
+.sldh .ldg2{animation-delay:1.2s}.sldh .ldg3{animation-delay:2.4s}
+@keyframes ldg{0%,100%{stroke:rgba(127,182,255,.35)}45%{stroke:#7fb6ff;filter:drop-shadow(0 0 8px rgba(127,182,255,.7))}}
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px;position:relative}
+.chain .chs{position:relative;border:1px solid var(--gb2);border-radius:10px;padding:9px 10px;background:rgba(255,255,255,.03);font-size:12.5px;color:var(--mute);animation:cs 8s infinite;min-width:0}
+.chain .chs b{display:block;color:#fff;font-weight:500;font-size:13px;white-space:nowrap}
+.chain .chs i{font-style:normal;font-family:"Roboto Mono",monospace;font-size:10px;letter-spacing:1px;color:var(--dim);display:block}
+.chain .chs:nth-child(2){animation-delay:1.6s}.chain .chs:nth-child(3){animation-delay:3.2s}.chain .chs:nth-child(4){animation-delay:4.8s}
+.chain .chs.hu{--c:255,122,128}.chain .chs.ai{--c:127,182,255}
+@keyframes cs{0%,6%{border-color:var(--gb2);box-shadow:none;background:rgba(255,255,255,.03)}10%,62%{border-color:rgba(var(--c),.75);box-shadow:0 0 22px rgba(var(--c),.28),inset 0 0 18px rgba(var(--c),.1);background:rgba(var(--c),.08)}75%,100%{border-color:var(--gb2);box-shadow:none;background:rgba(255,255,255,.03)}}
+.chain .chs .tick{position:absolute;top:8px;right:9px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:10px;color:#fff;background:rgba(255,255,255,.08);animation:tk 8s infinite}
+.chain .chs:nth-child(2) .tick{animation-delay:1.6s}.chain .chs:nth-child(3) .tick{animation-delay:3.2s}.chain .chs:nth-child(4) .tick{animation-delay:4.8s}
+@keyframes tk{0%,9%{background:rgba(255,255,255,.08)}14%,70%{background:var(--ok);box-shadow:0 0 10px rgba(47,181,125,.7)}80%,100%{background:rgba(255,255,255,.08)}}
+.chainbar{height:2px;background:rgba(255,255,255,.07);border-radius:2px;margin-top:10px;overflow:hidden}
+.chainbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#4f8fe6,#7fb6ff 45%,#ff7a80 55%,#d23c44);transform-origin:left;animation:cb 8s infinite}
+@keyframes cb{0%{transform:scaleX(0)}62%{transform:scaleX(1)}75%,100%{transform:scaleX(1);opacity:0}}
+.chainleg{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);font-family:"Roboto Mono",monospace;margin-top:8px;gap:10px}
+.chainleg span:last-child{color:#ff9a9e}
+.scrollcue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;color:var(--dim);font-size:11px;font-family:"Roboto Mono",monospace;letter-spacing:1.5px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+.scrollcue i{width:1px;height:28px;background:linear-gradient(var(--red2),transparent);animation:cue 2s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.light{background:linear-gradient(180deg,rgba(10,18,33,.7),rgba(6,11,20,.4));border-top:1px solid var(--gb);border-bottom:1px solid var(--gb)}
+.char{background:radial-gradient(900px 400px at 80% 0%,rgba(210,60,68,.07),transparent 70%)}
+.mute{color:var(--mute)}
+/* problem */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.stat{background:linear-gradient(180deg,rgba(18,32,56,.6),rgba(10,18,32,.5));border:1px solid var(--gb);border-radius:16px;padding:24px;position:relative;overflow:hidden;min-width:0}
+.stat:after{content:"";position:absolute;left:0;top:0;height:2px;width:100%;background:linear-gradient(90deg,var(--red2),transparent 70%);opacity:.7}
+.stat .n{font-size:40px;font-weight:300;color:#fff;letter-spacing:-1px;line-height:1.1;margin-bottom:10px;font-family:"Roboto Mono",monospace;text-shadow:0 0 24px rgba(255,122,128,.25)}
+.stat .n small{font-size:18px;color:var(--mute);margin-left:2px}
+.stat p{color:var(--mute);font-size:14.5px;margin:0}
+.stat.feature{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);column-gap:36px;align-items:start}
+.stat.feature .n{font-size:52px;grid-row:span 1}
+.stat.feature p{grid-column:2;grid-row:1/span 1;font-size:16px;color:var(--ink);opacity:.85}
+.stat.feature .tbar,.stat.feature .tlab,.stat.feature .src{grid-column:1/-1}
+.tbar{display:flex;height:44px;border-radius:10px;overflow:hidden;margin-top:22px;font-size:12.5px;font-family:"Roboto Mono",monospace;border:1px solid var(--gb2)}
+.tbar div{display:flex;align-items:center;padding:0 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbar .a{flex:1;background:linear-gradient(90deg,rgba(163,32,42,.55),rgba(210,60,68,.35));color:#fff;position:relative;box-shadow:inset 0 0 24px rgba(226,64,72,.3)}
+.tbar .b{flex:1;background:rgba(127,182,255,.08);color:var(--mute)}
+.tlab{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-top:8px;font-family:"Roboto Mono",monospace}
+.tlab span:first-child{color:#ff9a9e}
+.causes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.cause{border:1px solid var(--gb);border-radius:16px;padding:24px;background:rgba(255,255,255,.02)}
+.cause p{color:var(--mute);font-size:15px;margin:0 0 6px}
+.ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(210,60,68,.12);border:1px solid rgba(255,122,128,.25);margin-bottom:14px;box-shadow:0 0 18px rgba(226,64,72,.12)}
+.oeb{margin:28px 0 0;padding:28px 32px;border-radius:16px;border:1px solid var(--gb);background:linear-gradient(90deg,rgba(163,32,42,.14),rgba(14,25,44,.4));font-size:22px;color:#fff;font-weight:300;line-height:1.45;border-left:3px solid var(--red2)}
+.oeb cite{display:block;font-style:normal;font-size:13px;color:var(--mute);margin-top:12px}.oeb cite a{color:#9fb8d8}
+/* how */
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+.hcard{background:linear-gradient(180deg,rgba(18,32,56,.6),rgba(10,18,32,.55));border:1px solid var(--gb);border-radius:16px;padding:26px;position:relative}
+.hcard .k{font-family:"Roboto Mono",monospace;font-size:11.5px;letter-spacing:1.6px;color:var(--acc);margin-bottom:12px}
+.hcard.hu .k{color:#ff9a9e}.hcard.hu{border-color:rgba(255,122,128,.28);box-shadow:0 0 40px rgba(226,64,72,.08)}
+.hcard p{color:var(--mute);font-size:15px;margin:0 0 12px}
+.hcard ul,.scard ul{margin:0;padding:0;list-style:none}
+.hcard li,.scard li{font-size:14px;color:var(--ink);opacity:.85;padding:5px 0 5px 18px;position:relative}
+.hcard li:before,.scard li:before{content:"";position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:2px;background:var(--acc);box-shadow:0 0 6px var(--acc)}
+.hcard.hu li:before{background:var(--redt);box-shadow:0 0 6px var(--redt)}
+.ocra{margin-top:24px;border:1px solid var(--gb);border-radius:18px;padding:30px;background:rgba(255,255,255,.02)}
+.ocra-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:26px;position:relative}
+.ocra-line{position:absolute;left:12%;right:12%;top:22px;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc) 48%,var(--red2) 52%,var(--red2));opacity:.5}
+.ostep{position:relative;text-align:center;padding:0 6px}
+.ostep .dot{width:46px;height:46px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-family:"Roboto Mono",monospace;font-weight:700;color:#fff;position:relative;z-index:1;background:#0b1830;border:2px solid var(--acc);box-shadow:0 0 18px rgba(127,182,255,.35)}
+.ostep.hu .dot{border-color:var(--red2);box-shadow:0 0 18px var(--glow);background:#250b10}
+.ostep .who{font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--acc);margin-bottom:6px}
+.ostep.hu .who{color:#ff9a9e}.ostep p{color:var(--mute);font-size:13.5px;margin:0}
+.ocra-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;font-family:"Roboto Mono",monospace;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
+.ocra-split span{padding:8px;text-align:center;border-radius:8px;background:rgba(127,182,255,.07);color:var(--acc)}
+.ocra-split span+span{background:rgba(210,60,68,.1);color:#ff9a9e}
+.loop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;margin-top:64px;align-items:center}
+.loop p{color:var(--mute)}
+.loop ol{list-style:none;margin:0;padding:0;counter-reset:l;display:grid;gap:8px}
+.loop li{counter-increment:l;display:flex;gap:14px;align-items:center;border:1px solid var(--gb);border-radius:12px;padding:12px 16px;background:rgba(255,255,255,.02);color:var(--mute);font-size:15px}
+.loop li strong{color:#fff;font-weight:500}
+.loop li:before{content:counter(l,decimal-leading-zero);font-family:"Roboto Mono",monospace;font-size:12px;color:#ff9a9e;border:1px solid rgba(255,122,128,.3);border-radius:6px;padding:2px 6px;flex:none}
+/* services */
+.phase{margin-top:30px}
+.phase-h{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--gb);padding-bottom:12px;margin-bottom:16px}
+.phase-h h3{font-size:20px;margin:0}.phase-h span{color:var(--dim);font-size:13.5px;font-family:"Roboto Mono",monospace}
+.svc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.scard{border:1px solid var(--gb);border-radius:14px;padding:22px;background:linear-gradient(180deg,rgba(18,32,56,.5),rgba(10,18,32,.4));display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.scard:hover{border-color:rgba(127,182,255,.35);transform:translateY(-2px)}
+.scard .step{font-family:"Roboto Mono",monospace;font-size:11px;letter-spacing:1.5px;color:var(--acc);margin-bottom:8px}
+.scard p{color:var(--mute);font-size:14.5px;margin:0 0 10px}
+.scard ul{margin-bottom:14px}
+.role{margin-top:auto;align-self:flex-start;font-size:11.5px;font-family:"Roboto Mono",monospace;padding:4px 9px;border-radius:6px;border:1px solid}
+.role.own{color:#ff9a9e;border-color:rgba(255,122,128,.35);background:rgba(210,60,68,.1)}
+.role.sup{color:var(--acc);border-color:rgba(127,182,255,.3);background:rgba(127,182,255,.07)}
+.role.cert{color:var(--okt);border-color:rgba(95,224,166,.3);background:rgba(47,181,125,.08)}
+.notdo{margin-top:24px;border:1px dashed var(--gb2);border-radius:14px;padding:22px 26px}
+.notdo ul{margin:6px 0 0;padding-left:20px;color:var(--mute);font-size:14.5px}.notdo li{margin:6px 0}
+/* who */
+.who-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.wcard,.bcard{border:1px solid var(--gb);border-radius:14px;padding:22px;background:rgba(255,255,255,.025)}
+.wcard .ic{background:rgba(210,60,68,.1)}.wcard p,.bcard p{color:var(--mute);font-size:14.5px;margin:0}
+.buyers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.bcard{border-left:3px solid var(--red2)}
+/* why */
+.why{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.wy{display:flex;gap:18px;border:1px solid var(--gb);border-radius:16px;padding:24px;background:linear-gradient(180deg,rgba(18,32,56,.55),rgba(10,18,32,.45))}
+.wy .ic{flex:none;background:linear-gradient(180deg,#c22f38,#8f1c25);border-color:rgba(255,140,145,.4);box-shadow:0 0 22px var(--glow)}
+.wy p{color:var(--mute);font-size:15px;margin:0}
+/* trust */
+.trust{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:start}
+.ti{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--gb)}.ti:first-child{padding-top:0}
+.ti svg{flex:none}.ti p{color:var(--mute);font-size:15px;margin:0}.ti a{color:#9fb8d8}
+/* quotes */
+.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.q{margin:0;border:1px solid var(--gb);border-radius:16px;padding:26px 28px;background:linear-gradient(180deg,rgba(18,32,56,.5),rgba(10,18,32,.4));position:relative}
+.q:before{content:"\201C";position:absolute;top:6px;right:20px;font-size:72px;line-height:1;color:rgba(255,122,128,.22);font-family:Georgia,serif}
+.q.wide{grid-column:1/-1}.q.wide p{font-size:26px}
+.q p{font-size:18px;color:#fff;font-weight:300;margin:0 0 14px;line-height:1.5}
+.q cite{font-style:normal;font-size:13px;color:var(--mute);font-family:"Roboto Mono",monospace}
+/* utilities */
+.utils{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ucard{border:1px solid var(--gb);border-radius:14px;padding:22px;background:rgba(255,255,255,.025);display:flex;flex-direction:column}
+.ucard p{color:var(--mute);font-size:14.5px;margin:0 0 12px}.ucard a{margin-top:auto;font-size:14px;color:var(--acc);text-decoration:none}.ucard p a{color:#9fb8d8}
+.ucard .tag,.tag{align-self:flex-start;font-family:"Roboto Mono",monospace;font-size:10.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--okt);border:1px solid rgba(95,224,166,.3);border-radius:5px;padding:2px 7px;margin-bottom:12px}
+.ucard.next{border-style:dashed}.ucard.next .tag{color:var(--warnt);border-color:rgba(243,196,107,.35)}
+.umap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px}
+.pill{border:1px solid var(--gb2);border-radius:999px;padding:7px 14px;font-size:13px;color:var(--ink);background:rgba(255,255,255,.03)}
+.pill:first-child{border-color:rgba(255,122,128,.45);color:#fff;background:rgba(210,60,68,.14);box-shadow:0 0 16px rgba(226,64,72,.2)}
+.arr{color:var(--dim)}
+/* compare */
+.cmpwrap{border:1px solid var(--gb);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.015)}
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px}
+.cmp th,.cmp td{padding:15px 18px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.cmp thead th{font-family:"Roboto Mono",monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--mute);background:rgba(255,255,255,.025);font-weight:500}
+.cmp tbody th{color:#fff;font-weight:500;width:20%}
+.cmp td{color:var(--mute)}
+.cmp .nc{background:rgba(210,60,68,.08);color:#f2d9da;border-left:1px solid rgba(255,122,128,.25);border-right:1px solid rgba(255,122,128,.25)}
+.cmp thead .nc{color:#ff9a9e;background:rgba(210,60,68,.16)}
+.cmp tr:last-child td,.cmp tr:last-child th{border-bottom:0}
+/* pricing */
+.price{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+.pnotes{list-style:none;padding:0;margin:20px 0 0}
+.pnotes li{padding:7px 0 7px 26px;position:relative;color:var(--ink);opacity:.9}
+.pnotes li:before{content:"✓";position:absolute;left:0;color:var(--okt);font-weight:700}
+.pkgs{display:grid;gap:10px}
+.pkg{display:flex;justify-content:space-between;gap:16px;align-items:center;border:1px solid var(--gb);border-radius:14px;padding:18px 20px;background:linear-gradient(90deg,rgba(18,32,56,.6),rgba(10,18,32,.4));transition:border-color .2s}
+.pkg:hover{border-color:rgba(255,122,128,.35)}
+.pkg strong{display:block;color:#fff;font-weight:500}.pkg span{color:var(--mute);font-size:13.5px}
+.pkg em{font-style:normal;font-family:"Roboto Mono",monospace;font-size:12px;color:#ff9a9e;white-space:nowrap;border:1px solid rgba(255,122,128,.3);border-radius:6px;padding:4px 8px}
+/* faq */
+.faq{max-width:900px}
+.faq details{border:1px solid var(--gb);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);transition:border-color .2s}
+.faq details[open]{border-color:rgba(255,122,128,.3);background:rgba(210,60,68,.04)}
+.faq summary{cursor:pointer;padding:16px 20px;color:#fff;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font-family:"Roboto Mono",monospace;color:#ff9a9e;font-size:18px;line-height:1}
+.faq details[open] summary:after{content:"–"}
+.faq details p{margin:0;padding:0 20px 18px;color:var(--mute);font-size:15px}.faq a{color:#9fb8d8}
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:start}
+.about p{color:var(--mute)}.about .big{font-size:21px;color:#fff;font-weight:300;line-height:1.5}
+.cstats{display:grid;gap:12px}
+.cstats .cs{border:1px solid var(--gb);border-radius:14px;padding:20px 22px;background:rgba(255,255,255,.025)}
+.cstats .n{font-family:"Roboto Mono",monospace;font-size:34px;font-weight:300;color:var(--okt);text-shadow:0 0 20px rgba(95,224,166,.25)}
+.cstats p{margin:2px 0 0;font-size:14.5px}
+/* contact */
+.contact{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:start}
+.cinfo{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:14px}
+.cinfo li{display:flex;gap:12px;color:var(--mute);font-size:15px}.cinfo svg{flex:none;margin-top:2px}
+#cform{display:grid;grid-template-columns:1fr 1fr;gap:14px;border:1px solid var(--gb);border-radius:18px;padding:26px;background:linear-gradient(180deg,rgba(18,32,56,.6),rgba(10,18,32,.5))}
+#cform label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--mute);font-family:"Roboto Mono",monospace;letter-spacing:.3px;min-width:0}
+#cform .full{grid-column:1/-1}
+#cform input,#cform select,#cform textarea{font:15px Roboto,sans-serif;color:#fff;background:rgba(3,7,14,.6);border:1px solid var(--gb2);border-radius:10px;padding:11px 12px;outline:none;transition:border-color .15s,box-shadow .15s;width:100%;min-width:0}
+#cform select option{background:#0b1424}
+#cform textarea{min-height:110px;resize:vertical}
+#cform input:focus,#cform select:focus,#cform textarea:focus{border-color:rgba(255,122,128,.6);box-shadow:0 0 0 3px rgba(210,60,68,.18)}
+#cform .chk{flex-direction:row;align-items:flex-start;gap:10px;font-family:Roboto,sans-serif;font-size:14px}
+#cform .chk input{width:auto;margin-top:3px}
+.err{color:var(--redt);font-size:12px;min-height:0}
+.formmsg{display:none;grid-column:1/-1;border:1px solid rgba(95,224,166,.35);background:rgba(47,181,125,.1);color:var(--okt);border-radius:10px;padding:12px 14px;font-size:14px}.formmsg.show{display:block}
+/* footer */
+footer{border-top:1px solid var(--gb);padding:56px 0 30px;color:var(--mute);font-size:14px;background:#03060c}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px}
+footer h4{color:#fff;font-size:12px;font-family:"Roboto Mono",monospace;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 12px;font-weight:500}
+footer .fgrid a:not(.logo){display:block;color:var(--mute);text-decoration:none;padding:4px 0}footer .fgrid a:not(.logo):hover{color:#fff}
+.fbot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--gb);margin-top:36px;padding-top:20px;font-size:12.5px;color:var(--dim)}
+.fbot .concept{color:var(--warnt)}
+/* how: flow */
+.flowwrap{margin-top:8px;border:1px solid var(--gb);border-radius:20px;padding:26px 26px 20px;background:radial-gradient(700px 260px at 50% 0%,rgba(79,143,230,.08),transparent 70%),rgba(255,255,255,.015);position:relative;overflow:hidden}
+.flowwrap .fhd{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+#flowsvg{width:100%;height:auto;display:block}
+#flowsvg .nd rect{fill:#0a1526;stroke:rgba(140,175,225,.25);stroke-width:1.2;transition:stroke .4s,fill .4s,filter .4s}
+#flowsvg .nd .t1{font:500 14px Roboto,sans-serif;fill:#f3f6fb}
+#flowsvg .nd .t2{font:10px "Roboto Mono",monospace;fill:#8d9ab0;letter-spacing:.4px}
+#flowsvg .nd .t0{font:700 10px "Roboto Mono",monospace;letter-spacing:1.2px}
+#flowsvg .nd .bar{opacity:.9}
+#flowsvg .nd{opacity:0;transform:translateY(10px);transition:opacity .6s,transform .6s}
+#flowsvg .ed{fill:none;stroke-width:1.6;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset .8s ease}
+#flowsvg .edlab{font:10.5px "Roboto Mono",monospace;fill:#7b889e;opacity:0;transition:opacity .6s}
+#flowsvg .pkts{opacity:0;transition:opacity .6s}
+.flowwrap.play #flowsvg .nd{opacity:1;transform:none}
+.flowwrap.play #flowsvg .ed{stroke-dashoffset:0}
+.flowwrap.play #flowsvg .edlab,.flowwrap.play #flowsvg .pkts{opacity:1}
+#flowsvg .nd.on rect{stroke:var(--c);fill:rgba(20,32,55,1);filter:drop-shadow(0 0 12px var(--c))}
+.fcap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:14px}
+.fcap button{all:unset;cursor:pointer;border:1px solid var(--gb);border-radius:12px;padding:12px;font-size:13px;color:var(--mute);line-height:1.45;transition:border-color .3s,background .3s,color .3s;min-width:0}
+.fcap button b{display:block;font:500 11px "Roboto Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--c);margin-bottom:4px}
+.fcap button.on{border-color:var(--c);background:rgba(255,255,255,.04);color:var(--ink)}
+.fcap button:focus-visible{outline:2px solid var(--acc)}
+/* journey */
+.jlegend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.jlegend button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gb2);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink);background:rgba(255,255,255,.03);transition:all .2s}
+.jlegend button i{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.jlegend button[aria-pressed=true]{border-color:var(--c);background:rgba(255,255,255,.07)}
+.jlegend button:focus-visible{outline:2px solid var(--acc)}
+.jwrap{border:1px solid var(--gb);border-radius:20px;padding:26px;background:rgba(255,255,255,.015)}
+.jphase{display:grid;grid-template-columns:6fr 7fr;gap:10px;margin-bottom:14px;font:11px "Roboto Mono",monospace;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim)}
+.jphase span{border-top:1px solid var(--gb2);padding-top:8px}
+.jtw{position:relative}.jtrack{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:6px}
+.jline{position:absolute;left:3.8%;right:3.8%;top:21px;height:2px;background:rgba(140,175,225,.14);border-radius:2px}
+.jline i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#f3c46b,#ff7a80,#7fb6ff,#a99cff);box-shadow:0 0 10px rgba(255,122,128,.5);transition:width 1.6s cubic-bezier(.3,.7,.2,1)}
+.jtrack li{position:relative;z-index:1;min-width:0}
+.jtrack button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;width:100%;padding-bottom:4px}
+.jtrack .dd{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:500 13px "Roboto Mono",monospace;color:#fff;background:#08111f;border:2px solid var(--c);box-shadow:0 0 0 4px var(--bg);transition:transform .25s,box-shadow .25s,background .25s;position:relative}
+.jtrack .nm{font-size:12px;line-height:1.3;color:var(--mute);transition:color .2s;overflow-wrap:anywhere}
+.jtrack .ow{font:9.5px "Roboto Mono",monospace;letter-spacing:.8px;text-transform:uppercase;color:var(--c)}
+.jtrack button:hover .dd,.jtrack li.sel .dd{transform:scale(1.12);background:color-mix(in srgb,var(--c) 30%,#08111f);box-shadow:0 0 0 4px var(--bg),0 0 22px var(--c)}
+.jtrack li.sel .nm{color:#fff}
+.jtrack button:focus-visible .dd{outline:2px solid #fff;outline-offset:3px}
+.jtrack li.dim{opacity:.28}
+.jtrack li .dd:after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid var(--c);opacity:0}
+.jtrack li.sel .dd:after{animation:ping 1.8s infinite}
+@keyframes ping{0%{opacity:.8;transform:scale(.85)}100%{opacity:0;transform:scale(1.35)}}
+.jdetail{margin-top:24px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;border-top:1px solid var(--gb);padding-top:22px;min-height:150px}
+.jdetail h3{font-size:22px;margin:4px 0 6px}
+.jdetail .tech{font:12px "Roboto Mono",monospace;color:var(--dim)}
+.jdetail p{color:var(--mute);margin:8px 0 0;font-size:15px}
+.jowners{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.jowners span{display:inline-flex;align-items:center;gap:7px;font-size:13px;border:1px solid var(--c);color:#fff;border-radius:8px;padding:5px 10px;background:rgba(255,255,255,.04)}
+.jowners span i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.jowners span.sec{opacity:.7;border-style:dashed}
+.jrole{margin-top:14px;font:12.5px "Roboto Mono",monospace;color:#ff9a9e}
+.jctl{display:flex;gap:8px;margin-top:14px}
+.jfade{animation:jf .45s ease}@keyframes jf{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* glimpses */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+.gx{display:flex;flex-direction:column;gap:12px;min-width:0}
+.gx.s3{grid-column:span 3}.gx.s4{grid-column:span 4}.gx.s2{grid-column:span 2}.gx.s6{grid-column:span 6}
+.win{border:1px solid var(--gb2);border-radius:14px;background:#060d19;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.02) inset;position:relative;flex:1;display:flex;flex-direction:column}
+.win:after{content:"";position:absolute;left:0;right:0;bottom:0;height:42px;background:linear-gradient(transparent,#060d19);pointer-events:none}
+.wbar{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--gb);background:rgba(255,255,255,.025);font:11px "Roboto Mono",monospace;color:var(--dim);min-width:0}
+.wbar i{width:9px;height:9px;border-radius:50%;background:#2a3446;flex:none}.wbar i:nth-child(1){background:#5a2a30}
+.wbar .wt{margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.wbar .sample{margin-left:auto}
+.wbody{padding:16px;font-size:13px;color:var(--ink);flex:1;min-width:0}
+.gcap h3{font-size:16px;margin:0 0 4px}.gcap p{margin:0;color:var(--mute);font-size:14px}
+.gcap .tagm{display:block;margin-bottom:4px;color:#ff9a9e}
+/* g1 customer */
+.cp{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.ring{width:92px;height:92px;position:relative}
+.ring svg{transform:rotate(-90deg)}.ring .rv{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font:500 18px "Roboto Mono",monospace;color:#fff;line-height:1.1}.ring .rv small{display:block;font-size:9px;color:var(--dim);letter-spacing:1px}
+.ring .arc{stroke-dasharray:251;stroke-dashoffset:251;transition:stroke-dashoffset 1.6s ease}
+.in .ring .arc{stroke-dashoffset:var(--off)}
+.cp h4{margin:0;color:#fff;font-weight:500;font-size:15px}.cp .k{font:10.5px "Roboto Mono",monospace;color:var(--dim);letter-spacing:1px;text-transform:uppercase}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;border-radius:6px;padding:3px 8px;border:1px solid;margin-top:6px}
+.chip.ut{color:#a9ccff;border-color:rgba(127,182,255,.35);background:rgba(127,182,255,.08)}
+.chip.ok{color:var(--okt);border-color:rgba(95,224,166,.35);background:rgba(47,181,125,.08)}
+.chip.you{color:var(--warnt);border-color:rgba(243,196,107,.35);background:rgba(243,196,107,.08)}
+.mtl{display:grid;grid-template-columns:repeat(13,1fr);gap:4px;margin:16px 0 6px}
+.mtl i{height:6px;border-radius:3px;background:rgba(140,175,225,.15)}
+.mtl i.d{background:var(--okt)}.mtl i.c{background:var(--acc);box-shadow:0 0 8px var(--acc);animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.45}}
+.mtll{display:flex;justify-content:space-between;font:10px "Roboto Mono",monospace;color:var(--dim)}
+.feed{margin-top:12px;border-top:1px solid var(--gb);padding-top:10px;display:grid;gap:7px}
+.feed div{display:flex;gap:10px;font-size:12.5px;color:var(--mute)}.feed time{font:10.5px "Roboto Mono",monospace;color:var(--dim);flex:none;width:44px;padding-top:2px}
+.feed b{color:#fff;font-weight:500}
+/* g2 provenance */
+.pv{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px;align-items:start}
+.pvd{border:1px solid var(--gb);border-radius:10px;padding:12px;background:repeating-linear-gradient(0deg,transparent 0 19px,rgba(127,182,255,.05) 19px 20px),repeating-linear-gradient(90deg,transparent 0 19px,rgba(127,182,255,.05) 19px 20px)}
+.pvd .k{font:10px "Roboto Mono",monospace;color:var(--dim);letter-spacing:1px}
+.pvd .row{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px dashed var(--gb);font-size:12.5px;color:var(--mute)}
+.pvn{all:unset;cursor:pointer;font:500 13px "Roboto Mono",monospace;color:#ffd0d2;border-bottom:1px dashed #ff7a80;padding:0 2px;border-radius:3px;transition:background .2s}
+.pvn:hover,.pvn.on{background:rgba(210,60,68,.25);color:#fff}
+.pvn:focus-visible{outline:2px solid var(--acc)}
+.pop{border:1px solid rgba(255,122,128,.4);border-radius:12px;background:#0b1526;padding:12px;box-shadow:0 20px 40px rgba(0,0,0,.5),0 0 24px rgba(226,64,72,.15);position:relative;transition:opacity .3s,transform .3s}
+.pop.off{opacity:.25;transform:scale(.98)}
+.pop:before{content:"";position:absolute;left:-7px;top:38px;width:12px;height:12px;background:#0b1526;border-left:1px solid rgba(255,122,128,.4);border-bottom:1px solid rgba(255,122,128,.4);transform:rotate(45deg)}
+.pop .ph{font:10px "Roboto Mono",monospace;color:#ff9a9e;letter-spacing:1px;margin-bottom:6px}
+.pop dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;font-size:11.8px}
+.pop dt{font:10px "Roboto Mono",monospace;color:var(--dim);padding-top:2px;text-transform:uppercase}
+.pop dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+.pop .rr{display:flex;align-items:center;gap:8px;margin-top:10px}
+.pop .rr button{all:unset;cursor:pointer;font:11px "Roboto Mono",monospace;color:#fff;border:1px solid var(--gb2);border-radius:6px;padding:4px 9px;background:rgba(255,255,255,.05)}
+.pop .rr button:hover{border-color:var(--acc)}.pop .rr button:focus-visible{outline:2px solid var(--acc)}
+.pop .rs{font:11px "Roboto Mono",monospace;color:var(--dim)}.pop .rs.ok{color:var(--okt)}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid var(--acc);border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* g3 mission */
+.mh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.mh .orc{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#fff}
+.mh .kp{display:flex;gap:14px;font:11px "Roboto Mono",monospace;color:var(--dim)}.mh .kp b{color:#fff;font-weight:500}
+.fleet{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.ag{border:1px solid var(--gb);border-radius:10px;padding:9px 10px;background:rgba(255,255,255,.02);min-width:0;transition:border-color .3s}
+.ag .an{display:flex;align-items:center;gap:6px;font-size:12px;color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag .sd{width:7px;height:7px;border-radius:50%;flex:none;background:var(--okt);box-shadow:0 0 8px var(--okt)}
+.ag.run .sd{animation:blink 1.2s infinite}.ag.wait .sd{background:var(--warnt);box-shadow:0 0 8px var(--warnt)}.ag.idle .sd{background:#4a5568;box-shadow:none}
+.ag.wait{border-color:rgba(243,196,107,.3)}
+.ag .at{font-size:11px;color:var(--mute);margin:4px 0 7px;height:30px;overflow:hidden;line-height:1.35}
+.ag .pb{height:3px;border-radius:2px;background:rgba(140,175,225,.12);overflow:hidden}.ag .pb i{display:block;height:100%;background:var(--acc);transition:width .9s ease}
+.ag.wait .pb i{background:var(--warnt)}
+.mrel{margin-top:10px;display:flex;align-items:center;gap:10px;border:1px dashed rgba(243,196,107,.35);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--warnt)}
+/* g4 seal */
+.seal h4{margin:0 0 2px;color:#fff;font-weight:500;font-size:15px}.seal .k{font:10.5px "Roboto Mono",monospace;color:var(--dim)}
+.sck{list-style:none;margin:12px 0;padding:0;display:grid;gap:6px}
+.sck li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--mute);transition:color .3s}
+.sck li i{flex:none;width:16px;height:16px;border-radius:4px;border:1px solid var(--gb2);display:grid;place-items:center;font-style:normal;font-size:10px;color:transparent;transition:all .3s;margin-top:1px}
+.sck li.ok{color:var(--ink)}.sck li.ok i{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:0 0 8px rgba(47,181,125,.6)}
+.sealbtn{width:100%;margin-top:4px}
+.sealbtn.ready{animation:glowp 2s infinite}
+@keyframes glowp{50%{box-shadow:0 0 26px var(--glow)}}
+.snote{font-size:11.5px;color:var(--dim);margin-top:8px;line-height:1.45}
+.sdone{display:none;margin-top:8px;font:11.5px "Roboto Mono",monospace;color:var(--okt);border:1px solid rgba(95,224,166,.35);border-radius:8px;padding:7px 9px;background:rgba(47,181,125,.08)}.sdone.show{display:block}
+/* g5 graph */
+.rg{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:center}
+#rgsvg{width:100%;height:auto;display:block}
+#rgsvg text{font:10.5px "Roboto Mono",monospace;fill:#aebbd0}
+#rgsvg .e{stroke:rgba(140,175,225,.25);stroke-width:1.2;fill:none}
+#rgsvg .e.lv{stroke:#7fb6ff;stroke-dasharray:4 6;animation:flow 1.4s linear infinite}
+#rgsvg .e.nw{stroke:#f3c46b;stroke-dasharray:4 6;animation:flow 1.4s linear infinite}
+#rgsvg .newr{animation:pulse 2s infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pulse{50%{filter:drop-shadow(0 0 10px #f3c46b)}}
+.rgl{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:12.5px;color:var(--mute)}
+.rgl li{display:flex;gap:9px;align-items:center}.rgl li b{color:#fff;font-weight:500}
+.rgl li i{width:8px;height:8px;border-radius:2px;background:var(--c);flex:none}
+.gcta{display:flex;justify-content:center;margin-top:28px}
+/* trust trace */
+.trace2{border:1px solid var(--gb2);border-radius:18px;background:#060d19;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.4)}
+.trace2 .wbody{padding:20px}
+.tch{position:relative;list-style:none;margin:0;padding:0 0 0 34px}
+.tch:before{content:"";position:absolute;left:11px;top:10px;bottom:10px;width:2px;background:rgba(140,175,225,.14)}
+.tchw .beam{z-index:1;position:absolute;left:11px;top:10px;width:2px;height:0;background:linear-gradient(#ff7a80,#7fb6ff);box-shadow:0 0 10px #ff7a80;transition:height .9s ease}
+.tch li{position:relative;padding:10px 12px;margin-bottom:10px;border:1px solid var(--gb);border-radius:12px;background:rgba(255,255,255,.02);opacity:.35;transform:translateX(6px);transition:opacity .5s,transform .5s,border-color .5s,background .5s}
+.tch li:before{content:"";position:absolute;left:-29px;top:15px;width:12px;height:12px;border-radius:50%;background:#08111f;border:2px solid var(--c);transition:box-shadow .4s,background .4s}
+.tch li.lit{opacity:1;transform:none;border-color:color-mix(in srgb,var(--c) 45%,transparent);background:rgba(255,255,255,.035)}
+.tch li.lit:before{background:var(--c);box-shadow:0 0 12px var(--c)}
+.tch .tk{font:10px "Roboto Mono",monospace;letter-spacing:1.2px;text-transform:uppercase;color:var(--c)}
+.tch .tv{font-size:13.5px;color:#fff;margin-top:2px;overflow-wrap:anywhere}.tch .ts{font-size:12px;color:var(--mute);overflow-wrap:anywhere}
+.tch .hash{font-family:"Roboto Mono",monospace;font-size:11px;color:var(--dim)}
+.tsig{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:6px}
+.tsig div{border:1px solid var(--gb);border-radius:8px;padding:7px 8px;font-size:11px;color:var(--mute);min-width:0;overflow-wrap:anywhere}
+.tsig b{display:block;font:500 9.5px "Roboto Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--acc)}
+.tsig .h b{color:#ff9a9e}
+.trace2 .note{font-size:12px;color:var(--dim);margin:12px 0 0}
+@media (max-width:1240px){.mnav{display:none}.burger{display:grid;margin-left:auto}.hdr .cta2{margin-left:auto}
+.mnav.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:rgba(5,9,16,.97);border-bottom:1px solid var(--gb);padding:10px 20px 16px}
+.mnav.open a{padding:11px 8px;font-size:15px;border-bottom:1px solid var(--line);border-radius:0}}
+@media (max-width:1100px){.hero .wrap{grid-template-columns:1fr;gap:36px}.hero h1{font-size:52px}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.who-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.svc,.utils{grid-template-columns:repeat(2,minmax(0,1fr))}.fleet{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gx.s3,.gx.s4,.gx.s2{grid-column:span 3}.gx.s4{grid-column:span 6}
+.fcap{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){section{padding:72px 0}.wrap{padding:0 20px}h2{font-size:32px;letter-spacing:-.6px}
+.hero h1{font-size:40px;letter-spacing:-1.2px}.lede{font-size:16.5px}.hero .wrap{padding-top:40px;padding-bottom:70px}
+.hdr .platlink{display:none}
+.facts{grid-template-columns:1fr}
+.stats,.causes,.how,.svc,.who-grid,.buyers,.why,.quotes,.utils,.trust,.loop,.price,.about,.contact,.rg,.pv{grid-template-columns:minmax(0,1fr)}
+.stat.feature{grid-template-columns:minmax(0,1fr)}.stat.feature p{grid-column:1;grid-row:auto}
+.tbar{font-size:11px;height:auto;flex-direction:column}.tbar div{padding:9px 12px;white-space:normal}
+.ocra-row{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:24px}.ocra-line{display:none}
+.q.wide p{font-size:20px}.oeb{font-size:18px;padding:22px}
+.bento{grid-template-columns:minmax(0,1fr)}.gx.s3,.gx.s4,.gx.s2,.gx.s6{grid-column:auto}
+.fleet{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pop:before{display:none}
+.fcap{grid-template-columns:repeat(2,minmax(0,1fr))}
+.jphase{display:none}
+.jtrack{grid-template-columns:minmax(0,1fr);gap:0}
+.jline{left:20px;right:auto;top:20px;bottom:20px;width:2px;height:auto}.jline i{width:100%!important;height:var(--h,0);transition:height 1.6s ease}
+.jtrack button{flex-direction:row;text-align:left;gap:14px;padding:6px 0}
+.jtrack .nm{font-size:14px}.jtrack .ow{margin-left:auto;text-align:right;flex:none}
+.jdetail{grid-template-columns:minmax(0,1fr)}
+.jwrap{padding:18px}
+#cform{grid-template-columns:minmax(0,1fr);padding:20px}
 .fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}
-.tbar{flex-direction:column}.tbar div{padding:10px 12px}
-blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
-.cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:100%}.cmp thead{display:none}.cmp{border:0;background:none;font-size:14.5px}
-.cmp tr{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
-.cmp tbody th{width:100%;background:var(--navy);color:#fff;padding:12px 14px}
-.cmp td{padding:10px 14px;border-bottom:1px solid var(--line)}.cmp td:before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--mute);font-weight:700;margin-bottom:2px}
-.cmp td.nc:before{color:var(--red)}.cmp tr:last-child td{border-bottom:1px solid var(--line)}.cmp td:last-child{border-bottom:0!important}
-.hero .facts{grid-template-columns:1fr;gap:12px}
-.wy{flex-direction:column;padding:22px}.pkg{flex-direction:column;align-items:flex-start;gap:8px}
-.trow{grid-template-columns:86px 1fr}}
+.cmpwrap{border:0;background:none;overflow:visible}
+.cmp thead{display:none}.cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:100%}
+.cmp tr{border:1px solid var(--gb);border-radius:14px;margin-bottom:12px;overflow:hidden;background:rgba(255,255,255,.02)}
+.cmp tbody th{width:auto;background:rgba(255,255,255,.03)}
+.cmp td{border-left:0!important;border-right:0!important;padding:10px 16px}
+.cmp td:before{content:attr(data-label);display:block;font:10.5px "Roboto Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
+.cmp td.nc:before{color:#ff9a9e}
+.pkg{flex-direction:column;align-items:flex-start}
+.scrollcue{display:none}
+.tsig{grid-template-columns:repeat(2,minmax(0,1fr))}
+.chain{grid-template-columns:repeat(2,minmax(0,1fr))}
+.chainleg{flex-direction:column;gap:2px}}
+@media (max-width:420px){.hero h1{font-size:35px}.logo{font-size:16px}.hdr .btn.sm{padding:7px 11px;font-size:12.5px}.fleet{grid-template-columns:minmax(0,1fr)}
+.cp{grid-template-columns:minmax(0,1fr)}}
+html.rm *,html.rm *:before,html.rm *:after{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}.reveal{opacity:1;transform:none}.sldh .pk{display:none}}
+html.rm .reveal{opacity:1;transform:none}html.rm .sldh .pk{display:none}
+
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="hdr">
 <div class="wrap">
-<a class="logo" href="#hero" aria-label="NewCo home"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="6" fill="#8b1a1a"/><path d="M7 22V8l8 9 8-9v14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="15" cy="17" r="1.8" fill="#fff"/></svg>NewCo</a>
+<a class="logo" href="#hero" aria-label="Pylon home"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="7" fill="#a3202a"/><path d="M10 24L15 6l5 18M9 11h12M7.5 15h15M12 19.5h6M12.6 15l4.8 4.5M17.4 15l-4.8 4.5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></svg>PYLON</a>
 <nav class="mnav" id="mnav" aria-label="Main">
-<a href="#problem">Problem</a><a href="#how">How it works</a><a href="#services">Services</a><a href="#who">Who it's for</a><a href="#trust">Trust</a><a href="#utilities">Utilities</a><a href="#compare">Compare</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#about">About</a>
+<a href="#problem">Problem</a><a href="#how">How it works</a><a href="#journey">Journey</a><a href="#glimpses">Product</a><a href="#services">Services</a><a href="#trust">Trust</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#about">About</a>
 </nav>
-<a class="btn sm" href="#contact">Request an assessment</a>
-<button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="#fff" stroke-width="2"/></svg></button>
+<div class="cta2"><a class="btn ghost sm platlink" href="Pylon_Platform_Frontend.html" target="_blank" rel="noopener">Platform concept <span class="ext">↗</span></a><a class="btn sm" href="#contact">Request an assessment</a></div>
+<button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="#fff" stroke-width="2"/></svg></button>
 </div>
 </header>
 <main id="main">
 <section class="hero" id="hero">
-<svg class="gridbg" aria-hidden="true" width="100%" height="100%"><defs><pattern id="gp" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#1d3050" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#gp)"/></svg>
-<div class="wrap grid" style="position:relative">
-<div>
+<canvas id="heroCanvas" aria-hidden="true"></canvas>
+<div class="wrap">
+<div class="herotxt">
 <span class="eyebrow">MV/HV grid connection engineering</span>
-<h1>Grid connection engineering, <em>signed</em> and moving.</h1>
-<p class="lede">NewCo is an engineering firm for medium- and high-voltage load connections. AI agents draft, check and track every package. Licensed professional engineers review, approve and seal it, and stay engineer of record from application through commissioning.</p>
+<h1>Grid connections, engineered at agent speed. <span class="grad">Signed by engineers.</span></h1>
+<p class="lede">Pylon is an engineering firm for medium- and high-voltage load connections. AI agents draft, check and track every package. Licensed professional engineers review, approve and seal it, and stay engineer of record from application through commissioning.</p>
 <div class="ctas"><a class="btn" href="#contact">Request a connection assessment <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="#fff" stroke-width="2"/></svg></a><a class="btn ghost" href="#how">See how it works</a></div>
 <div class="facts">
 <div><strong>Engineer-sealed</strong>A licensed engineer signs every package</div>
@@ -253,34 +505,40 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <div><strong>Ontario first</strong>Toronto Hydro · Alectra · Hydro One Distribution</div>
 </div>
 </div>
-<div>
-<svg class="sld" viewBox="0 0 520 470" role="img" aria-label="Abstract single-line diagram: utility supply, transformer, main breaker and load bus, with agent and engineer review stages">
-<text x="20" y="30">UTILITY SUPPLY · MV</text>
-<path class="wire" d="M40 44h440"/><path class="live" d="M40 44h440"/>
-<path class="wire" d="M260 44v42"/><path class="live" d="M260 44v42"/>
-<circle cx="260" cy="104" r="18" fill="none" stroke="#7d93b5" stroke-width="2"/><circle cx="260" cy="128" r="18" fill="none" stroke="#7d93b5" stroke-width="2"/>
-<text x="290" y="112">TX-1</text><text x="290" y="128">service transformer</text>
-<path class="wire" d="M260 146v34"/><path class="live" d="M260 146v34"/>
-<rect x="246" y="180" width="28" height="28" class="box" rx="3"/><path d="M252 202l16-16" stroke="#7d93b5" stroke-width="2"/>
-<text x="290" y="198">52-M main breaker</text>
-<path class="wire" d="M260 208v40"/><path class="live" d="M260 208v40"/>
-<path d="M70 248h380" stroke="#c9d4e4" stroke-width="5"/>
-<text x="70" y="238">LOAD BUS</text>
-<path class="wire" d="M120 248v40M260 248v40M400 248v40"/>
-<rect x="70" y="288" width="100" height="48" rx="6" class="box"/><text x="82" y="308" class="lbl">Industrial</text><text x="82" y="324">process load</text>
-<rect x="210" y="288" width="100" height="48" rx="6" class="box"/><text x="222" y="308" class="lbl">EV / fleet</text><text x="222" y="324">charging depot</text>
-<rect x="350" y="288" width="100" height="48" rx="6" class="box"/><text x="362" y="308" class="lbl">Data centre</text><text x="362" y="324">IT + cooling</text>
-<g transform="translate(20,370)">
-<rect width="480" height="84" rx="10" fill="#0f1c30" stroke="#24344e"/>
-<text x="16" y="22">PACKAGE · ORIGINATOR → CHECKER → REVIEWER → APPROVER</text>
-<g transform="translate(16,36)"><rect width="100" height="32" rx="5" fill="#1f3a5f"/><text x="12" y="20" class="lbl">Agent drafts</text></g>
-<g transform="translate(130,36)"><rect width="100" height="32" rx="5" fill="#1f3a5f"/><text x="12" y="20" class="lbl">Agent checks</text></g>
-<g transform="translate(244,36)"><rect width="100" height="32" rx="5" fill="#5a2230"/><text x="10" y="20" class="lbl">P.Eng reviews</text></g>
-<g transform="translate(358,36)"><rect width="106" height="32" rx="5" class="seal"/><text x="12" y="20" class="lbl">P.Eng seals ✓</text></g>
-</g>
+<div class="heroviz">
+<div class="gl hl">
+<div class="vizh"><span class="tagm">One-line · power flow</span><span class="sample">Illustrative</span></div>
+<svg class="sldh" viewBox="0 0 520 330" role="img" aria-label="Animated single-line diagram: power flows from the utility supply through the service transformer and main breaker to the load bus and three loads">
+<text x="40" y="26">UTILITY SUPPLY · MV</text>
+<path class="w" d="M40 40H480"/><path class="flow" d="M40 40H480"/>
+<path class="w" d="M260 40V80"/><path class="flow" d="M260 40V80"/>
+<circle class="eq" cx="260" cy="96" r="17"/><circle class="eq" cx="260" cy="118" r="17"/>
+<text x="290" y="102" class="lbl">TX-1</text><text x="290" y="118">service transformer</text>
+<path class="w" d="M260 135V162"/><path class="flow" d="M260 135V162"/>
+<rect class="eq" x="247" y="162" width="26" height="26" rx="3"/><path d="M253 182l14-14" stroke="#9fc2ea" stroke-width="1.8"/>
+<text x="290" y="174" class="lbl">52-M</text><text x="290" y="189">main breaker</text>
+<path class="w" d="M260 188V224"/><path class="flow" d="M260 188V224"/>
+<text x="70" y="216">LOAD BUS</text>
+<path class="bus" d="M70 226H450"/>
+<path class="w" d="M120 228V262M260 228V262M400 228V262"/><path class="flow r" d="M120 228V262M260 228V262M400 228V262"/>
+<rect class="ld ldg" x="62" y="262" width="116" height="52" rx="8"/><text x="76" y="284" class="lbl">Industrial</text><text x="76" y="301">process load</text>
+<rect class="ld ldg ldg2" x="202" y="262" width="116" height="52" rx="8"/><text x="216" y="284" class="lbl">EV / fleet</text><text x="216" y="301">charging depot</text>
+<rect class="ld ldg ldg3" x="342" y="262" width="116" height="52" rx="8"/><text x="356" y="284" class="lbl">Data centre</text><text x="356" y="301">IT + cooling</text>
+<g class="pk"><circle r="4" fill="#cfe4ff"><animateMotion dur="3.6s" repeatCount="indefinite" path="M40 40H260V226H120V262"/></circle><circle r="4" fill="#cfe4ff"><animateMotion dur="3.6s" begin="1.2s" repeatCount="indefinite" path="M40 40H260V226V262"/></circle><circle r="4" fill="#cfe4ff"><animateMotion dur="3.6s" begin="2.4s" repeatCount="indefinite" path="M40 40H260V226H400V262"/></circle></g>
 </svg>
+<div class="tagm" style="margin-top:4px">Package · originator → checker → reviewer → approver</div>
+<div class="chain" aria-label="Sign-off sequence: agent drafts, agent checks, P.Eng reviews, P.Eng seals">
+<div class="chs ai"><i>O · AGENT</i><b>Agent drafts</b><span class="tick">✓</span></div>
+<div class="chs ai"><i>C · AGENT</i><b>Agent checks</b><span class="tick">✓</span></div>
+<div class="chs hu"><i>R · P.ENG</i><b>P.Eng reviews</b><span class="tick">✓</span></div>
+<div class="chs hu"><i>A · P.ENG</i><b>P.Eng seals</b><span class="tick">✓</span></div>
+</div>
+<div class="chainbar"><i></i></div>
+<div class="chainleg"><span>Agents originate and check</span><span>Engineer applies the seal personally</span></div>
 </div>
 </div>
+</div>
+<a class="scrollcue" href="#problem" aria-label="Scroll to the problem section"><i></i>SCROLL</a>
 </section>
 
 <section class="light" id="problem">
@@ -289,7 +547,7 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <div class="stats">
 <div class="stat feature reveal"><div class="n">Close to half</div><p>of the time from the first impact studies to energization in Hydro One's recent large-load connections went to those studies (the System Impact Assessment and Customer Impact Assessment) and to cost estimates. Add the feasibility and application work that comes first, and roughly half of the total timeline passes before anything is built.</p>
 <div class="tbar" aria-hidden="true"><div class="a">Before construction: screening, application, studies, estimates, design</div><div class="b">Equipment and construction</div></div>
-<div class="tlab"><span>NewCo works here</span><span>Illustrative, not to scale</span></div>
+<div class="tlab"><span>Pylon works here</span><span>Illustrative, not to scale</span></div>
 <div class="src">Source: <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">OEB, Streamlining Ontario's Electricity Connection Framework, Table 1, p. 23</a></div></div>
 <div class="stat reveal"><div class="n">75%</div><p>Forecast rise in Ontario's electricity demand by 2050, led by industrial electrification.</p><div class="src">Source: <a href="https://ieso.ca/-/media/Files/IESO/Document-Library/planning-forecasts/apo/2025/2025-Annual-Planning-Outlook.pdf" target="_blank" rel="noopener">IESO, 2025 Annual Planning Outlook</a></div></div>
 <div class="stat reveal"><div class="n">24 → 166<small> GW</small></div><p>US utilities' five-year peak-growth forecasts, 2022 to 2025.</p><div class="src">Source: <a href="https://gridstrategiesllc.com/wp-content/uploads/Grid-Strategies-National-Load-Growth-Report-2025.pdf" target="_blank" rel="noopener">Grid Strategies, National Load Growth Report 2025</a></div></div>
@@ -297,17 +555,21 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <div class="stat reveal"><div class="n">8<small> months</small></div><p>Median backlog at Canadian consulting engineering firms.</p><div class="src">Source: <a href="https://acec.ca/publications/industry_outlook.html" target="_blank" rel="noopener">ACEC-Canada, Industry Outlook</a></div></div>
 </div>
 <div class="causes">
-<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 11h6M19 8v6"/></svg></div><h3>Not enough engineers on either side</h3><p>Utility connection teams are sized by multi-year rate plans and can't grow when requests jump. At Toronto Hydro, a senior engineer carries 20 to 30 high-voltage projects at once, and a medium-voltage engineer up to 60.</p><p class="src">Per Toronto Hydro's Customer Connections Intake Manager (practitioner interview).</p></div>
-<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5"/><path d="M8 13l3 3M11 13l-3 3M13 15h4"/></svg></div><h3>Requirements differ by utility, so packages come back</h3><p>Each utility has its own drawing requirements and templates, checklists are generic, and comments arrive in rounds. Missing items often surface only after a utility engineer opens the file.</p><p class="src">Practitioner interviews; <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">OEB</a>.</p></div>
-<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M3 6h12v8H8l-4 3v-3H3z"/><path d="M15 9h6v8h-1v3l-4-3h-4v-3"/></svg></div><h3>Coordination runs on email, phone and paper</h3><p>A utility connection engineer spends an estimated 30–40% of the day on communication. There is no shared tracker applicants can check, so they email and call for updates.</p><p class="src">Per Toronto Hydro's Customer Connections Intake Manager (practitioner interview; estimate).</p></div>
+<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff7a80" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 11h6M19 8v6"/></svg></div><h3>Not enough engineers on either side</h3><p>Utility connection teams are sized by multi-year rate plans and can't grow when requests jump. At Toronto Hydro, a senior engineer carries 20 to 30 high-voltage projects at once, and a medium-voltage engineer up to 60.</p><p class="src">Per Toronto Hydro's Customer Connections Intake Manager (practitioner interview).</p></div>
+<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff7a80" stroke-width="1.8" aria-hidden="true"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5"/><path d="M8 13l3 3M11 13l-3 3M13 15h4"/></svg></div><h3>Requirements differ by utility, so packages come back</h3><p>Each utility has its own drawing requirements and templates, checklists are generic, and comments arrive in rounds. Missing items often surface only after a utility engineer opens the file.</p><p class="src">Practitioner interviews; <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">OEB</a>.</p></div>
+<div class="cause reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff7a80" stroke-width="1.8" aria-hidden="true"><path d="M3 6h12v8H8l-4 3v-3H3z"/><path d="M15 9h6v8h-1v3l-4-3h-4v-3"/></svg></div><h3>Coordination runs on email, phone and paper</h3><p>A utility connection engineer spends an estimated 30–40% of the day on communication. There is no shared tracker applicants can check, so they email and call for updates.</p><p class="src">Per Toronto Hydro's Customer Connections Intake Manager (practitioner interview; estimate).</p></div>
 </div>
 <blockquote class="oeb reveal">"Relatively limited changes in information often result in restarting the assessment timeline from the beginning."<cite>Ontario Energy Board, <a href="https://www.oeb.ca/sites/default/files/uploads/documents/reports/2026-08/Report-back%20Streamlining%20Ontarios%20Electricity%20Connection%20Framework.PDF" target="_blank" rel="noopener">Streamlining Ontario's Electricity Connection Framework</a>. The OEB also notes that engineering design is the one step in the connection process with no required timeline.</cite></blockquote>
 </div>
 </section>
-
 <section class="dark" id="how">
 <div class="wrap">
-<div class="sh reveal"><span class="eyebrow">How it works</span><h2>Agents draft, check and track. Engineers review, approve and seal.</h2><p>NewCo's production system is a set of role agents, each mirroring an accountable position in a conventional consulting practice, supervised by licensed engineers who hold the only authority to approve and seal.</p></div>
+<div class="sh reveal"><span class="eyebrow">How it works</span><h2>Agents draft, check and track. Engineers review, approve and seal.</h2><p>Pylon's production system is a set of role agents, each mirroring an accountable position in a conventional consulting practice, supervised by licensed engineers who hold the only authority to approve and seal.</p></div>
+<div class="flowwrap reveal" id="flow">
+<div class="fhd"><span class="tagm">The package loop · from request to a smarter next package</span><span class="sample">Concept flow</span></div>
+<svg id="flowsvg" role="img" aria-label="Flow: customer request, role agents originate check and track, engineer of record reviews approves and seals, sealed submission to the utility, utility comments, rulebook learns and feeds the checks on the next package"></svg>
+<div class="fcap" id="fcap"></div>
+</div>
 <div class="how">
 <div class="hcard reveal"><div class="k">01 · DRAFT</div><h3>Agents prepare the package</h3><p>Role agents originate the work from a single project record, so a change propagates everywhere.</p><ul><li>Load calculations and concept single-lines</li><li>Application drawings, site plans and equipment data</li><li>Utility forms populated from the project record</li><li>Study cases built and run in ETAP, SKM, PSS/E or PSCAD</li></ul></div>
 <div class="hcard reveal"><div class="k">02 · CHECK &amp; TRACK</div><h3>An independent checker, and one tracker</h3><p>A separate checker agent, plus deterministic rule checks, tests every package against the utility's own requirements before it is filed.</p><ul><li>Per-utility rulebook, updated from every comment round</li><li>Consistency across drawings, calculations and forms</li><li>Utility status, comments and deadlines tracked in one place</li><li>Client status portal: you always know where the package is</li></ul></div>
@@ -325,7 +587,7 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <div class="ocra-split"><span>Agents originate and check</span><span>Engineers review, approve and seal</span></div>
 </div>
 <div class="loop">
-<div class="reveal"><span class="eyebrow">Learning from every comment</span><h2 style="font-size:30px">Every utility comment becomes a check on the next package.</h2><p>Requirements differ by utility and are rarely written down. NewCo records what each utility's reviewers actually ask for and checks every package against it before submission, so packages arrive complete the first time.</p></div>
+<div class="reveal"><span class="eyebrow">Learning from every comment</span><h2 style="font-size:30px">Every utility comment becomes a check on the next package.</h2><p>Requirements differ by utility and are rarely written down. Pylon records what each utility's reviewers actually ask for and checks every package against it before submission, so packages arrive complete the first time.</p></div>
 <ol class="reveal">
 <li><strong>Capture</strong> the utility's comment letter or markup.</li>
 <li><strong>Classify</strong> it by discipline, type and root cause.</li>
@@ -337,43 +599,173 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 </div>
 </div>
 </section>
+<section id="journey" class="sec-line">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">The connection journey</span><h2>Thirteen steps from first screening to power on. You always know who holds the file.</h2><p>Every MV/HV load connection passes through the same utility process. Pylon owns the engineering steps and supports the rest; the utility, ESA and you keep the decisions that are yours. Select a step to see who owns it.</p></div>
+<div class="jlegend reveal" id="jlegend" role="group" aria-label="Highlight steps by owner">
+<button type="button" data-o="you" style="--c:#f3c46b" aria-pressed="false"><i></i>You (customer)</button>
+<button type="button" data-o="nc" style="--c:#ff7a80" aria-pressed="false"><i></i>Pylon agents + engineer</button>
+<button type="button" data-o="ut" style="--c:#7fb6ff" aria-pressed="false"><i></i>Utility</button>
+<button type="button" data-o="es" style="--c:#a99cff" aria-pressed="false"><i></i>ESA / inspector</button>
+</div>
+<div class="jwrap reveal" id="jwrap">
+<div class="jphase" aria-hidden="true"><span>Before construction · steps 0–5</span><span>Design, construction and commissioning · steps 6–12</span></div>
+<div class="jtw"><div class="jline" aria-hidden="true"><i id="jfill"></i></div><ol class="jtrack" id="jtrack"></ol></div>
+<div class="jdetail" id="jdetail" aria-live="polite"></div>
+</div>
+<p class="src">Step names follow the customer portal's plain-language view; the step owners reflect the services described below.</p>
+</div>
+</section>
+
+<section id="glimpses" class="light">
+<div class="wrap">
+<div class="sh reveal"><span class="eyebrow">Product glimpses</span><h2>The system behind every package, built so an engineer can trust it.</h2><p>Live HTML replicas from the Pylon platform concept. Everything shown is sample data: placeholder names, sample values and placeholder utility requirements.</p></div>
+<div class="bento">
+
+<div class="gx s3 reveal" id="g1">
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span class="wt">pylon / customer / PKG-0142</span><span class="sample">Product concept · sample data</span></div>
+<div class="wbody">
+<div class="cp">
+<div class="ring"><svg width="92" height="92" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="40" fill="none" stroke="rgba(140,175,225,.14)" stroke-width="7"/><circle class="arc" cx="46" cy="46" r="40" fill="none" stroke="#7fb6ff" stroke-width="7" stroke-linecap="round" style="--off:183"/></svg><div class="rv">3/13<small>STEP</small></div></div>
+<div><div class="k">Sample site · Plant 2 service upgrade</div><h4>Answer utility questions</h4><span class="chip ut">● With the utility · comment round 2</span> <span class="chip ok">Nothing needed from you</span></div>
+</div>
+<div class="mtl" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="mtll"><span>Check the site</span><span>Power on</span></div>
+<div class="feed">
+<div><time>09:42</time><span><b>Utility Liaison agent</b> logged comment round 2 (sample)</span></div>
+<div><time>10:15</time><span><b>Drafting agent</b> revised the site plan; checker re-run</span></div>
+<div><time>11:03</time><span><b>A. Engineer, P.Eng</b> approved the responses for release</span></div>
+</div>
+</div></div>
+<div class="gcap"><span class="tagm">Customer portal</span><h3>Project status in plain language</h3><p>Where the package is, who holds it, and whether anything is waiting on you.</p></div>
+</div>
+
+<div class="gx s3 reveal" id="g2">
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span class="wt">pylon / engineer / trace</span><span class="sample">Product concept · sample data</span></div>
+<div class="wbody">
+<div class="pv">
+<div class="pvd"><div class="k">SHORT-CIRCUIT SUMMARY · SAMPLE</div>
+<div class="row"><span>Fault at 52-M</span><button type="button" class="pvn on" id="pvn" aria-expanded="true" aria-controls="pop">35.6 kA</button></div>
+<div class="row"><span>X/R at 52-M</span><span class="mono">12.4</span></div>
+<div class="row" style="border:0"><span>Device rating</span><span class="mono">50 kA</span></div>
+<div class="k" style="margin-top:8px">Click the value to trace it</div></div>
+<div class="pop" id="pop" role="dialog" aria-label="Provenance for 35.6 kA">
+<div class="ph">PROVENANCE · 35.6 kA</div>
+<dl>
+<dt>Inputs</dt><dd>Utility source data · rec U-118 · <span class="hash">sha 3f9c…a1</span><br>TX-1 nameplate · D-07 rev B</dd>
+<dt>Rule</dt><dd>RB-UTIL-A §x.x (placeholder requirement)</dd>
+<dt>Tool</dt><dd>Pylon calculation engine 0.9.4 (sample)</dd>
+<dt>Model</dt><dd>Studies agent v0.9 · checked by Checker agent v0.9</dd>
+</dl>
+<div class="rr"><button type="button" id="rerun">↻ Rerun case</button><span class="rs" id="rrs">Rerun bundle ready</span></div>
+</div>
+</div>
+</div></div>
+<div class="gcap"><span class="tagm">Click-to-trace provenance</span><h3>Every number opens its chain</h3><p>Inputs, rulebook clause, tool and model versions, and a one-click rerun of the case.</p></div>
+</div>
+
+<div class="gx s4 reveal" id="g3">
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span class="wt">pylon / mission-control / fleet</span><span class="sample">Product concept · sample data</span></div>
+<div class="wbody">
+<div class="mh"><div class="orc"><span class="sample" style="background:rgba(127,182,255,.1);color:#a9ccff;border-color:rgba(127,182,255,.35)">Orchestrator</span>Routing 10 role agents across live packages</div><div class="kp"><span>Running <b id="kRun">6</b></span><span>Awaiting human <b id="kWait">2</b></span></div></div>
+<div class="fleet" id="fleet"></div>
+<div class="mrel">⚑ Year-one rule: every outbound agent action waits for a human release.</div>
+</div></div>
+<div class="gcap"><span class="tagm">Mission control</span><h3>The agent fleet, supervised</h3><p>Each role agent mirrors an accountable position in a consulting practice. Status, current task and anything waiting on a person.</p></div>
+</div>
+
+<div class="gx s2 reveal" id="g4">
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span class="wt">pylon / seal</span><span class="sample">Concept · sample</span></div>
+<div class="wbody seal">
+<h4>Apply seal · PKG-0142</h4><div class="k">Application package · rev C (sample)</div>
+<ul class="sck" id="sck">
+<li><i>✓</i>Design basis approved by engineer of record</li>
+<li><i>✓</i>All checker findings resolved, reasons recorded</li>
+<li><i>✓</i>Rule checks: 0 open (sample)</li>
+<li><i>✓</i>Rerun bundle reproduced</li>
+<li><i>✓</i>Drawing set revision locked</li>
+</ul>
+<button type="button" class="btn sm sealbtn" id="sealbtn" disabled>Apply my seal</button>
+<div class="sdone" id="sdone">Signed by A. Engineer, P.Eng (placeholder) · demo only</div>
+<p class="snote">Signing happens outside the agent system with the engineer's own credential. No agent holds signing credentials.</p>
+</div></div>
+<div class="gcap"><span class="tagm">Seal checklist</span><h3>The seal stays personal</h3><p>The engineer applies it, only after every check is closed.</p></div>
+</div>
+
+<div class="gx s6 reveal" id="g5">
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span class="wt">pylon / rulebook / graph</span><span class="sample">Product concept · sample data</span></div>
+<div class="wbody">
+<div class="rg">
+<svg id="rgsvg" viewBox="0 0 640 220" role="img" aria-label="Rulebook graph sample: a utility rulebook with placeholder clauses linked to checks and live packages, plus a proposed rule from a comment awaiting validation">
+<path class="e" d="M90 110C150 110 150 50 220 50M90 110H220M90 110C150 110 150 170 220 170"/>
+<path class="e lv" d="M300 50C350 50 360 40 420 40M300 110C350 110 360 90 420 90M300 50C350 50 360 140 420 140M300 170C350 170 360 140 420 140"/>
+<path class="e" d="M500 40H545M500 90C520 90 525 110 545 110M500 140C520 140 525 110 545 110M500 140C520 140 525 180 545 180"/>
+<path class="e nw" d="M300 200C360 200 380 190 420 190"/>
+<g><rect x="10" y="88" width="80" height="44" rx="8" fill="#2a0f14" stroke="#ff7a80"/><text x="20" y="107" style="fill:#fff">Utility A</text><text x="20" y="122">rulebook</text></g>
+<g><rect x="220" y="32" width="80" height="36" rx="7" fill="#0b1526" stroke="#7fb6ff"/><text x="230" y="54">§x.1 (ph.)</text></g>
+<g><rect x="220" y="92" width="80" height="36" rx="7" fill="#0b1526" stroke="#7fb6ff"/><text x="230" y="114">§x.2 (ph.)</text></g>
+<g><rect x="220" y="152" width="80" height="36" rx="7" fill="#0b1526" stroke="#7fb6ff"/><text x="230" y="174">§x.3 (ph.)</text></g>
+<g><rect x="420" y="24" width="80" height="32" rx="7" fill="#0a1a17" stroke="#5fe0a6"/><text x="430" y="44">Check C-1</text></g>
+<g><rect x="420" y="74" width="80" height="32" rx="7" fill="#0a1a17" stroke="#5fe0a6"/><text x="430" y="94">Check C-2</text></g>
+<g><rect x="420" y="124" width="80" height="32" rx="7" fill="#0a1a17" stroke="#5fe0a6"/><text x="430" y="144">Check C-3</text></g>
+<g class="newr"><rect x="420" y="174" width="96" height="32" rx="7" fill="#221a08" stroke="#f3c46b" stroke-dasharray="4 3"/><text x="428" y="194" style="fill:#f3c46b">Proposed rule</text></g>
+<g><rect x="545" y="24" width="88" height="32" rx="16" fill="#0b1526" stroke="rgba(140,175,225,.4)"/><text x="556" y="44">PKG-0142</text></g>
+<g><rect x="545" y="94" width="88" height="32" rx="16" fill="#0b1526" stroke="rgba(140,175,225,.4)"/><text x="556" y="114">PKG-0157</text></g>
+<g><rect x="545" y="164" width="88" height="32" rx="16" fill="#0b1526" stroke="rgba(140,175,225,.4)"/><text x="556" y="184">PKG-0163</text></g>
+<text x="230" y="214" style="fill:#f3c46b">from comment C-12</text>
+</svg>
+<ul class="rgl">
+<li style="--c:#ff7a80"><i></i><b>Utility rulebook</b>&nbsp;one per utility</li>
+<li style="--c:#7fb6ff"><i></i><b>Clauses</b>&nbsp;placeholder requirements</li>
+<li style="--c:#5fe0a6"><i></i><b>Checks</b>&nbsp;run on every live package</li>
+<li style="--c:#f3c46b"><i></i><b>Proposed rule</b>&nbsp;awaiting a senior engineer</li>
+</ul>
+</div>
+</div></div>
+<div class="gcap"><span class="tagm">Rulebook graph</span><h3>What each utility asks for, as checks that apply to every live package</h3><p>Comments become proposed rules; a senior engineer accepts, edits or rejects them before they apply.</p></div>
+</div>
+
+</div>
+<div class="gcta reveal"><a class="btn ghost" href="Pylon_Platform_Frontend.html" target="_blank" rel="noopener">Explore the full platform concept <span class="ext">↗</span></a></div>
+</div>
+</section>
+
 <section class="light" id="services">
 <div class="wrap">
-<div class="sh reveal"><span class="eyebrow">Services</span><h2>One firm on the file, from first screening to energization.</h2><p>NewCo takes MV and HV load connections through each phase of the utility process, and stays on as engineer of record through detailed design, construction support and certified commissioning.</p></div>
+<div class="sh reveal"><span class="eyebrow">Services</span><h2>One firm on the file, from first screening to energization.</h2><p>Pylon takes MV and HV load connections through each phase of the utility process, and stays on as engineer of record through detailed design, construction support and certified commissioning.</p></div>
 <div class="phase">
 <div class="phase-h"><h3>Before construction</h3><span>Screening, application, studies and comment rounds</span></div>
 <div class="svc">
-<div class="scard reveal"><div class="step">STEP 0</div><h3>Site and feasibility screening</h3><p>Where and how the site can connect before you commit: available capacity, the station and feeder that serve it, constraints and likely upgrades.</p><ul><li>Existing-conditions capture from as-builts, nameplates and bills</li><li>Options memo with risks</li></ul><span class="role own">NewCo owns</span></div>
-<div class="scard reveal"><div class="step">STEP 1</div><h3>Load sizing and concept design</h3><p>Demand calculation under the Ontario Electrical Safety Code and your growth plan, then service voltage and configuration.</p><ul><li>Load calculation and growth scenarios</li><li>Concept single-line and preliminary equipment sizing</li></ul><span class="role own">NewCo owns</span></div>
-<div class="scard reveal"><div class="step">STEP 2</div><h3>Utility application</h3><p>A complete connection request assembled against the utility's own checklist, sealed and submitted.</p><ul><li>Forms, single-line, site plan, equipment and protection data</li><li>Engineer's seal and portal submission</li></ul><span class="role own">NewCo owns</span></div>
-<div class="scard reveal"><div class="step">STEP 3</div><h3>Utility comment rounds</h3><p>We track the completeness review and technical comments, write the responses, revise drawings and calculations, and resubmit under the engineer's approval.</p><ul><li>Comment intake, classification and responses</li><li>Revisions with traced knock-on changes</li></ul><span class="role own">NewCo owns</span></div>
+<div class="scard reveal"><div class="step">STEP 0</div><h3>Site and feasibility screening</h3><p>Where and how the site can connect before you commit: available capacity, the station and feeder that serve it, constraints and likely upgrades.</p><ul><li>Existing-conditions capture from as-builts, nameplates and bills</li><li>Options memo with risks</li></ul><span class="role own">Pylon owns</span></div>
+<div class="scard reveal"><div class="step">STEP 1</div><h3>Load sizing and concept design</h3><p>Demand calculation under the Ontario Electrical Safety Code and your growth plan, then service voltage and configuration.</p><ul><li>Load calculation and growth scenarios</li><li>Concept single-line and preliminary equipment sizing</li></ul><span class="role own">Pylon owns</span></div>
+<div class="scard reveal"><div class="step">STEP 2</div><h3>Utility application</h3><p>A complete connection request assembled against the utility's own checklist, sealed and submitted.</p><ul><li>Forms, single-line, site plan, equipment and protection data</li><li>Engineer's seal and portal submission</li></ul><span class="role own">Pylon owns</span></div>
+<div class="scard reveal"><div class="step">STEP 3</div><h3>Utility comment rounds</h3><p>We track the completeness review and technical comments, write the responses, revise drawings and calculations, and resubmit under the engineer's approval.</p><ul><li>Comment intake, classification and responses</li><li>Revisions with traced knock-on changes</li></ul><span class="role own">Pylon owns</span></div>
 <div class="scard reveal"><div class="step">STEPS 1, 4 &amp; 6</div><h3>Power system studies</h3><p>Studies run in the tools utilities already accept, with a model file the reviewer can open and rerun.</p><ul><li>Short circuit and load flow</li><li>Arc flash (CSA Z462) and protection coordination</li><li>Grounding (IEEE 80), motor starting and harmonics</li><li>Data and models for utility and IESO impact assessments</li></ul><span class="role sup">Studies for your design; we support the utility's studies</span></div>
-<div class="scard reveal"><div class="step">STEP 5</div><h3>Offer to connect: technical review</h3><p>We check the technical scope, ownership boundaries and cost drivers in the utility's offer, and advise on alternatives, including flexible connections.</p><ul><li>Offer and agreement schedule review</li><li>Options: accept, value-engineer, phase, flexible connection</li></ul><span class="role sup">NewCo supports; the owner negotiates and signs</span></div>
+<div class="scard reveal"><div class="step">STEP 5</div><h3>Offer to connect: technical review</h3><p>We check the technical scope, ownership boundaries and cost drivers in the utility's offer, and advise on alternatives, including flexible connections.</p><ul><li>Offer and agreement schedule review</li><li>Options: accept, value-engineer, phase, flexible connection</li></ul><span class="role sup">Pylon supports; the owner negotiates and signs</span></div>
 </div>
 </div>
 <div class="phase">
 <div class="phase-h"><h3>Design, construction and commissioning</h3><span>Engineer of record through close-out</span></div>
 <div class="svc">
-<div class="scard reveal"><div class="step">STEP 6</div><h3>Detailed design at 30/60/90%</h3><p>Full design of the customer's facilities, issued in stages for review.</p><ul><li>Single-lines, three-lines, cable and equipment schedules</li><li>Substation physical layout and grounding</li><li>Protection and control, relay settings</li><li>Metering and SCADA</li></ul><span class="role own">NewCo owns</span></div>
-<div class="scard reveal"><div class="step">STEP 7</div><h3>Utility and ESA design approval</h3><p>ESA Electronic Plan Review submissions and responses, and utility review of protection settings, metering and interfaces.</p><ul><li>ESA plan review packaging and responses</li><li>Utility design review comment rounds</li></ul><span class="role own">NewCo owns the submission and responses</span></div>
-<div class="scard reveal"><div class="step">STEP 8</div><h3>Issued-for-construction and procurement support</h3><p>The sealed IFC set and specifications, plus technical review of what you buy.</p><ul><li>Equipment specifications and technical bid evaluation</li><li>Transformer and switchgear submittal review</li></ul><span class="role own">NewCo owns drawings and specs; you or your EPC buy</span></div>
-<div class="scard reveal"><div class="step">STEP 9</div><h3>Construction support</h3><p>Answers to contractor questions, field changes with an impact check, and as-built drawings.</p><ul><li>RFIs and change notices</li><li>As-builts from field redlines</li></ul><span class="role sup">NewCo supports; the EPC or contractor builds</span></div>
-<div class="scard reveal"><div class="step">STEPS 10–11</div><h3>Testing, commissioning and certification</h3><p>Commissioning plan, final relay settings and test sheets. We review field results against the design and issue the engineer-certified test report.</p><ul><li>Test report review</li><li>Certified report and ESA inspection support</li></ul><span class="role cert">NewCo reviews and certifies; test crews do the hands-on work</span></div>
+<div class="scard reveal"><div class="step">STEP 6</div><h3>Detailed design at 30/60/90%</h3><p>Full design of the customer's facilities, issued in stages for review.</p><ul><li>Single-lines, three-lines, cable and equipment schedules</li><li>Substation physical layout and grounding</li><li>Protection and control, relay settings</li><li>Metering and SCADA</li></ul><span class="role own">Pylon owns</span></div>
+<div class="scard reveal"><div class="step">STEP 7</div><h3>Utility and ESA design approval</h3><p>ESA Electronic Plan Review submissions and responses, and utility review of protection settings, metering and interfaces.</p><ul><li>ESA plan review packaging and responses</li><li>Utility design review comment rounds</li></ul><span class="role own">Pylon owns the submission and responses</span></div>
+<div class="scard reveal"><div class="step">STEP 8</div><h3>Issued-for-construction and procurement support</h3><p>The sealed IFC set and specifications, plus technical review of what you buy.</p><ul><li>Equipment specifications and technical bid evaluation</li><li>Transformer and switchgear submittal review</li></ul><span class="role own">Pylon owns drawings and specs; you or your EPC buy</span></div>
+<div class="scard reveal"><div class="step">STEP 9</div><h3>Construction support</h3><p>Answers to contractor questions, field changes with an impact check, and as-built drawings.</p><ul><li>RFIs and change notices</li><li>As-builts from field redlines</li></ul><span class="role sup">Pylon supports; the EPC or contractor builds</span></div>
+<div class="scard reveal"><div class="step">STEPS 10–11</div><h3>Testing, commissioning and certification</h3><p>Commissioning plan, final relay settings and test sheets. We review field results against the design and issue the engineer-certified test report.</p><ul><li>Test report review</li><li>Certified report and ESA inspection support</li></ul><span class="role cert">Pylon reviews and certifies; test crews do the hands-on work</span></div>
 <div class="scard reveal"><div class="step">STEP 12</div><h3>Energization and close-out</h3><p>The utility connects and switches on. We coordinate, hand over records, and feed the outcome back into our rulebook.</p><ul><li>Records handover</li><li>Close-out</li></ul><span class="role sup">The utility energizes</span></div>
 </div>
 </div>
-<div class="notdo reveal"><h3>What NewCo doesn't do</h3><ul><li>Build, buy equipment or do the utility's grid-side work. Crews, equipment and grid-side work stay with contractors, suppliers and the utility.</li><li>Run the utility's or IESO's impact studies, or approve anything. Those belong to the utility, the IESO and ESA. We make them faster by sending complete, accurate inputs the first time.</li><li>Negotiate or sign the commercial agreement. That is the owner's decision; we give you the technical basis.</li></ul></div>
+<div class="notdo reveal"><h3>What Pylon doesn't do</h3><ul><li>Build, buy equipment or do the utility's grid-side work. Crews, equipment and grid-side work stay with contractors, suppliers and the utility.</li><li>Run the utility's or IESO's impact studies, or approve anything. Those belong to the utility, the IESO and ESA. We make them faster by sending complete, accurate inputs the first time.</li><li>Negotiate or sign the commercial agreement. That is the owner's decision; we give you the technical basis.</li></ul></div>
 </div>
 </section>
-
 <section class="char" id="who">
 <div class="wrap">
 <div class="sh reveal"><span class="eyebrow">Who it's for</span><h2>Sites connecting or upgrading a medium- or high-voltage service.</h2><p>We start with upgrades to existing MV/HV services, the largest request type at Toronto Hydro, and take on new large-load connections with the same team.</p></div>
 <div class="who-grid">
-<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M3 28V14l7 4v-4l7 4v-4l7 4V6h5v22z"/><path d="M8 23h3M15 23h3M22 23h3"/></svg></div><h3>Industrial sites</h3><p>Electric furnaces, boilers, process heat and motors in manufacturing, mining and steel.</p></div>
-<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><rect x="4" y="5" width="13" height="22" rx="2"/><path d="M11 10l-3 6h5l-3 6"/><path d="M17 12h4a3 3 0 013 3v6a2 2 0 004 0V11l-3-3"/></svg></div><h3>EV and fleet depots</h3><p>Charging for buses, trucks and delivery fleets.</p></div>
-<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><rect x="5" y="4" width="22" height="7" rx="1.5"/><rect x="5" y="13" width="22" height="7" rx="1.5"/><rect x="5" y="22" width="22" height="6" rx="1.5"/><path d="M9 7.5h2M9 16.5h2M9 25h2"/></svg></div><h3>Data centres</h3><p>Large new loads with MV or HV service, often with transmission-level studies.</p></div>
-<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M6 28V6h12v22M18 12h8v16M3 28h26"/><path d="M10 10h4M10 14h4M10 18h4M10 22h4M21 16h2M21 20h2M21 24h2"/></svg></div><h3>Large commercial buildings</h3><p>Buildings and multi-site portfolios adding electrified heating and charging.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><path d="M3 28V14l7 4v-4l7 4v-4l7 4V6h5v22z"/><path d="M8 23h3M15 23h3M22 23h3"/></svg></div><h3>Industrial sites</h3><p>Electric furnaces, boilers, process heat and motors in manufacturing, mining and steel.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><rect x="4" y="5" width="13" height="22" rx="2"/><path d="M11 10l-3 6h5l-3 6"/><path d="M17 12h4a3 3 0 013 3v6a2 2 0 004 0V11l-3-3"/></svg></div><h3>EV and fleet depots</h3><p>Charging for buses, trucks and delivery fleets.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><rect x="5" y="4" width="22" height="7" rx="1.5"/><rect x="5" y="13" width="22" height="7" rx="1.5"/><rect x="5" y="22" width="22" height="6" rx="1.5"/><path d="M9 7.5h2M9 16.5h2M9 25h2"/></svg></div><h3>Data centres</h3><p>Large new loads with MV or HV service, often with transmission-level studies.</p></div>
+<div class="wcard reveal"><div class="ic"><svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><path d="M6 28V6h12v22M18 12h8v16M3 28h26"/><path d="M10 10h4M10 14h4M10 18h4M10 22h4M21 16h2M21 20h2M21 24h2"/></svg></div><h3>Large commercial buildings</h3><p>Buildings and multi-site portfolios adding electrified heating and charging.</p></div>
 </div>
 <div class="buyers">
 <div class="bcard reveal"><h3>Owners and developers</h3><p>You pay for the connection, so every month of waiting leaves land, equipment and financing idle.</p></div>
@@ -382,49 +774,52 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 </div>
 </div>
 </section>
-
 <section id="why">
 <div class="wrap">
 <div class="sh reveal"><span class="eyebrow">Why an engineering firm, not software</span><h2>On the grid, the signature is the product.</h2><p>Owners and EPCs connecting MV and HV loads aren't shopping for a tool. They're buying a named engineer who takes responsibility for the design.</p></div>
 <div class="why">
 <div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="10" r="6"/><path d="M9 10l2 2 4-4"/><path d="M8 15l-2 7 6-3 6 3-2-7"/></svg></div><div><h3>Signed results, not software output</h3><p>You receive engineer-sealed packages in the utility's own forms and formats. The firm that signs carries the professional responsibility, which is often why buyers outsource this work in the first place.</p></div></div>
-<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><div><h3>A fixed price per package</h3><p>Incumbent fees are fixed but scoped from hours, with extra comment rounds billed hourly. NewCo charges a fixed price per signed package with comment rounds included, so the time agents save becomes speed for you rather than billable hours.</p></div></div>
+<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><div><h3>A fixed price per package</h3><p>Incumbent fees are fixed but scoped from hours, with extra comment rounds billed hourly. Pylon charges a fixed price per signed package with comment rounds included, so the time agents save becomes speed for you rather than billable hours.</p></div></div>
 <div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.3 11l7.4-3.8M8.3 13l7.4 3.8"/></svg></div><div><h3>One accountable counterpart</h3><p>The problem is the handoffs between applicants, consultants and utilities. A firm doing the work removes handoffs that a tracking tool can only log, and the utility deals with one engineer of record.</p></div></div>
-<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg></div><div><h3>Capacity you can't hire fast enough</h3><p>A tool speeds up an existing engineer, but you still have to find and hire one. NewCo is the added capacity, and available capacity is often what decides who gets the work.</p></div></div>
+<div class="wy reveal"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg></div><div><h3>Capacity you can't hire fast enough</h3><p>A tool speeds up an existing engineer, but you still have to find and hire one. Pylon is the added capacity, and available capacity is often what decides who gets the work.</p></div></div>
 </div>
 </div>
 </section>
-
 <section class="dark" id="trust">
 <div class="wrap">
-<div class="sh reveal"><span class="eyebrow">Trust and traceability</span><h2>No black boxes. Every number traces back to its inputs.</h2><p>Before signing AI-assisted work, an engineer needs a full trace of every input and assumption, results from standard tools, and the ability to rerun critical cases. That is how NewCo is built.</p></div>
+<div class="sh reveal"><span class="eyebrow">Trust and traceability</span><h2>No black boxes. Every number traces back to its inputs.</h2><p>Before signing AI-assisted work, an engineer needs a full trace of every input and assumption, results from standard tools, and the ability to rerun critical cases. That is how Pylon is built.</p></div>
 <div class="trust">
 <div>
-<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><circle cx="6" cy="8" r="3"/><circle cx="6" cy="24" r="3"/><circle cx="26" cy="16" r="3"/><path d="M9 8h6l8 7M9 24h6l8-7"/></svg><div><h3>Every number tied to its inputs</h3><p>An append-only ledger records every agent action and human decision. Each number in a sealed package carries its chain of inputs, assumptions, tool versions and model versions.</p></div></div>
-<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M26 16a10 10 0 11-3-7.1"/><path d="M26 5v6h-6"/></svg><div><h3>Models you can rerun in ETAP, PSS/E or PSCAD</h3><p>Studies run in the tools utilities already accept. Every study ships with a rerun bundle: the native model file, case settings and the script that reproduces each result.</p></div></div>
-<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><path d="M16 3l11 4v8c0 7-5 12-11 14C10 27 5 22 5 15V7z"/><path d="M11 16l3.5 3.5L21 13"/></svg><div><h3>An independent check before anything is filed</h3><p>The checker is separate from the agent that drafted the work, and deterministic rule checks run without any model at all. A model checking its own work is not a check.</p></div></div>
-<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><circle cx="16" cy="13" r="8"/><path d="M12 13l3 3 5-6"/><path d="M11 20l-2 9 7-3 7 3-2-9"/></svg><div><h3>The engineer holds the seal</h3><p>Packages are sealed by professional engineers licensed in Ontario (<a href="https://www.peo.on.ca/licence-holders/peng-seal" target="_blank" rel="noopener">PEO</a>) and Québec (<a href="https://www.oiq.qc.ca/membres/obligations-des-membres/votre-sceau-et-votre-signature-comme-ingenieur/" target="_blank" rel="noopener">OIQ</a>). PEO's digital signature must remain under the sole control of its holder (<a href="https://www.peo.on.ca/licence-holders/peo-digital-signature" target="_blank" rel="noopener">PEO</a>), so signing happens outside the agent system and no agent holds signing credentials.</p></div></div>
-<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#e9a9a9" stroke-width="1.7" aria-hidden="true"><rect x="6" y="14" width="20" height="14" rx="2"/><path d="M11 14V9a5 5 0 0110 0v5"/></svg><div><h3>Your data stays controlled</h3><p>Enterprise model contracts with zero data retention and no training on your inputs, hosting and storage in a Canadian region, and isolation between clients, in line with the <a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ's guidance on responsible AI use</a>.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><circle cx="6" cy="8" r="3"/><circle cx="6" cy="24" r="3"/><circle cx="26" cy="16" r="3"/><path d="M9 8h6l8 7M9 24h6l8-7"/></svg><div><h3>Every number tied to its inputs</h3><p>An append-only ledger records every agent action and human decision. Each number in a sealed package carries its chain of inputs, assumptions, tool versions and model versions.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><path d="M26 16a10 10 0 11-3-7.1"/><path d="M26 5v6h-6"/></svg><div><h3>Models you can rerun in ETAP, PSS/E or PSCAD</h3><p>Studies run in the tools utilities already accept. Every study ships with a rerun bundle: the native model file, case settings and the script that reproduces each result.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><path d="M16 3l11 4v8c0 7-5 12-11 14C10 27 5 22 5 15V7z"/><path d="M11 16l3.5 3.5L21 13"/></svg><div><h3>An independent check before anything is filed</h3><p>The checker is separate from the agent that drafted the work, and deterministic rule checks run without any model at all. A model checking its own work is not a check.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><circle cx="16" cy="13" r="8"/><path d="M12 13l3 3 5-6"/><path d="M11 20l-2 9 7-3 7 3-2-9"/></svg><div><h3>The engineer holds the seal</h3><p>The plan: every package is sealed by professional engineers licensed in Ontario (<a href="https://www.peo.on.ca/licence-holders/peng-seal" target="_blank" rel="noopener">PEO</a>) and Québec (<a href="https://www.oiq.qc.ca/membres/obligations-des-membres/votre-sceau-et-votre-signature-comme-ingenieur/" target="_blank" rel="noopener">OIQ</a>). PEO's digital signature must remain under the sole control of its holder (<a href="https://www.peo.on.ca/licence-holders/peo-digital-signature" target="_blank" rel="noopener">PEO</a>), so signing happens outside the agent system and no agent holds signing credentials.</p></div></div>
+<div class="ti reveal"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#ff9a9e" stroke-width="1.7" aria-hidden="true"><rect x="6" y="14" width="20" height="14" rx="2"/><path d="M11 14V9a5 5 0 0110 0v5"/></svg><div><h3>Your data stays controlled</h3><p>Enterprise model contracts with zero data retention and no training on your inputs, hosting and storage in a Canadian region, and isolation between clients, in line with the <a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ's guidance on responsible AI use</a>.</p></div></div>
 </div>
-<div class="trace reveal" role="figure" aria-label="Example calculation trace layout">
-<div class="th">Calculation trace <span>EXAMPLE LAYOUT</span></div>
-<div class="trow"><b>Value</b><div class="v">Available fault current at the main breaker</div></div>
-<div class="trow"><b>Inputs</b><div class="v"><div class="tnode"><i></i>Utility source data (record + hash)</div><div class="tnode"><i></i>Transformer nameplate</div><div class="tnode"><i></i>Single-line graph, revision</div></div></div>
-<div class="trow"><b>Tool</b><div class="v">Study tool, version, licence instance</div></div>
-<div class="trow"><b>Rerun</b><div class="v">Native model file · case settings · script</div></div>
-<div class="trow"><b>Originator</b><div class="v"><div class="tnode"><i></i>Studies agent (version)</div></div></div>
-<div class="trow"><b>Checker</b><div class="v"><div class="tnode"><i></i>Checker agent + rule checks</div></div></div>
-<div class="trow"><b>Reviewer</b><div class="v"><div class="tnode"><i class="r"></i>Discipline P.Eng, reason recorded</div></div></div>
-<div class="trow"><b>Approver</b><div class="v"><div class="tnode"><i class="r"></i>Engineer of record, seal</div></div></div>
-<p class="note">Illustrative structure of a trace entry: field names only, no project data.</p>
+<div class="trace2 reveal" id="trace" role="figure" aria-label="Animated example of a calculation trace, with sample data">
+<div class="wbar"><i></i><i></i><i></i><span class="wt">pylon / ledger / trace</span><span class="sample">Example · sample data</span></div>
+<div class="wbody">
+<div class="tchw" style="position:relative"><span class="beam" id="beam" aria-hidden="true"></span><ol class="tch" id="tch">
+<li style="--c:#ff7a80"><div class="tk">01 · Number</div><div class="tv">Available fault current at the main breaker · <span class="mono">35.6 kA</span></div><div class="ts">Value in the sealed package (sample)</div></li>
+<li style="--c:#f3c46b"><div class="tk">02 · Input documents</div><div class="tv">Utility source data · TX-1 nameplate · single-line rev C</div><div class="ts hash">rec U-118 · sha 3f9c…a1 · D-07 rev B (sample)</div></li>
+<li style="--c:#7fb6ff"><div class="tk">03 · Rulebook clause</div><div class="tv">RB-UTIL-A §x.x</div><div class="ts">Placeholder utility requirement, not a real utility rule</div></li>
+<li style="--c:#a99cff"><div class="tk">04 · Tool and model versions</div><div class="tv">Pylon calculation engine 0.9.4 · Studies agent v0.9 · Checker agent v0.9</div><div class="ts">Sample versions; licence instance recorded</div></li>
+<li style="--c:#5fe0a6"><div class="tk">05 · Rerun</div><div class="tv">Native model file · case settings · script</div><div class="ts" id="trr">Reproduces the result from the bundle</div></li>
+</ol></div>
+<div class="tsig">
+<div><b>Originator</b>Studies agent</div><div><b>Checker</b>Checker agent + rule checks</div><div class="h"><b>Reviewer</b>Discipline P.Eng, reason recorded</div><div class="h"><b>Approver</b>Engineer of record, seal</div>
 </div>
+<p class="note">Illustrative structure of a trace entry with sample values; no project data. <button type="button" class="btn ghost sm" id="retrace" style="margin-left:6px;padding:4px 10px;font-size:12px">↻ Trace again</button></p>
+</div>
+</div>
+
 </div>
 <p class="src" style="margin-top:28px">Ontario and Québec allow AI-assisted work when a licensed engineer directs it and takes responsibility: <a href="https://www.peo.on.ca/node/8224" target="_blank" rel="noopener">PEO AI advisory</a>; <a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ guide</a>. In Québec, plans not prepared under the engineer's direction and immediate supervision cannot be sealed (<a href="https://gpp.oiq.qc.ca/Obligation_de_signer_et_sceller.htm" target="_blank" rel="noopener">OIQ</a>), which is why our engineer sets the design basis at the start, not only at the end.</p>
 </div>
 </section>
 <section class="char" id="heard">
 <div class="wrap">
-<div class="sh reveal"><span class="eyebrow">What we heard from the industry</span><h2>From practitioners on every side of the process.</h2><p>Verbatim from interviews with an EPC, a utility and a consulting engineer. The quotes describe the problem; they are not endorsements of NewCo.</p></div>
+<div class="sh reveal"><span class="eyebrow">What we heard from the industry</span><h2>From practitioners on every side of the process.</h2><p>Verbatim from interviews with an EPC, a utility and a consulting engineer. The quotes describe the problem; they are not endorsements of Pylon.</p></div>
 <div class="quotes">
 <figure class="q wide reveal"><p>I don't want to, let's say, approve a black box kind of a study.</p><cite>- Haris Rashid, Pre-Construction Development Lead @ TruGrid</cite></figure>
 <figure class="q reveal"><p>We don't have like a centralized system that tells you where the bread is at. Is it in the oven? Is it out of the oven? Is it coming to your house?</p><cite>- Sheldon Pinto, Customer Connections Intake Manager @ Toronto Hydro</cite></figure>
@@ -434,7 +829,6 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 </div>
 </div>
 </section>
-
 <section class="light" id="utilities">
 <div class="wrap">
 <div class="sh reveal"><span class="eyebrow">Utilities served</span><h2>Starting in Ontario, through each utility's own process.</h2><p>We prepare packages for each utility's intake channel and requirements. Utility names identify the connection processes we work with; they do not imply endorsement.</p></div>
@@ -449,32 +843,30 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <div class="umap reveal"><span class="pill">MV/HV load upgrades · Ontario</span><span class="arr">→</span><span class="pill">New large loads</span><span class="arr">→</span><span class="pill">United States</span><span class="arr">→</span><span class="pill">Generation and storage</span></div>
 </div>
 </section>
-
 <section id="compare">
 <div class="wrap">
-<div class="sh reveal"><span class="eyebrow">Compare</span><h2>How NewCo differs from a traditional consultancy and from software tools.</h2></div>
+<div class="sh reveal"><span class="eyebrow">Compare</span><h2>How Pylon differs from a traditional consultancy and from software tools.</h2></div>
 <div class="cmpwrap reveal" data-scrollx>
 <table class="cmp">
-<thead><tr><th scope="col"><span class="mute" style="font-weight:400">Approach</span></th><th scope="col" class="nc">NewCo</th><th scope="col">Traditional consultancy</th><th scope="col">Software tools</th></tr></thead>
+<thead><tr><th scope="col"><span class="mute" style="font-weight:400">Approach</span></th><th scope="col" class="nc">Pylon</th><th scope="col">Traditional consultancy</th><th scope="col">Software tools</th></tr></thead>
 <tbody>
-<tr><th scope="row">What you receive</th><td data-label="NewCo" class="nc">Engineer-sealed packages, from screening to certified commissioning</td><td data-label="Traditional consultancy">Engineer-sealed packages</td><td data-label="Software tools">Analysis, reports or a platform; your engineer still prepares and signs</td></tr>
-<tr><th scope="row">Who signs and carries responsibility</th><td data-label="NewCo" class="nc">NewCo's licensed engineer of record</td><td data-label="Traditional consultancy">The consultancy's engineer of record</td><td data-label="Software tools">No seal; responsibility stays with the engineer who uses the tool</td></tr>
-<tr><th scope="row">Pricing</th><td data-label="NewCo" class="nc">Fixed price per signed package, comment rounds included</td><td data-label="Traditional consultancy">Fixed fees scoped from hours; extra comment rounds billed hourly</td><td data-label="Software tools">Subscription or per report, on top of engineering fees</td></tr>
-<tr><th scope="row">Capacity</th><td data-label="NewCo" class="nc">Agents do the drafting, checking and tracking, so each engineer can carry more packages</td><td data-label="Traditional consultancy">Limited by engineers available; firms report long backlogs</td><td data-label="Software tools">Speeds up an engineer you still have to hire</td></tr>
-<tr><th scope="row">Utility-specific requirements</th><td data-label="NewCo" class="nc">Per-utility rulebook, checked before filing and updated after every comment round</td><td data-label="Traditional consultancy">Held in individual engineers' experience</td><td data-label="Software tools">Can flag gaps, but can't stamp the fix or sit in the comment round</td></tr>
-<tr><th scope="row">Traceability</th><td data-label="NewCo" class="nc">Every number traced to its inputs; rerun bundles in ETAP, PSS/E or PSCAD</td><td data-label="Traditional consultancy">Model files and calculations, organized per firm practice</td><td data-label="Software tools">Varies by tool</td></tr>
-<tr><th scope="row">Coordination</th><td data-label="NewCo" class="nc">One owner of the file, one tracker, a client status portal</td><td data-label="Traditional consultancy">Email and phone between applicant, consultant and utility</td><td data-label="Software tools">Logs handoffs between parties; doesn't remove them</td></tr>
+<tr><th scope="row">What you receive</th><td data-label="Pylon" class="nc">Engineer-sealed packages, from screening to certified commissioning</td><td data-label="Traditional consultancy">Engineer-sealed packages</td><td data-label="Software tools">Analysis, reports or a platform; your engineer still prepares and signs</td></tr>
+<tr><th scope="row">Who signs and carries responsibility</th><td data-label="Pylon" class="nc">Pylon's licensed engineer of record</td><td data-label="Traditional consultancy">The consultancy's engineer of record</td><td data-label="Software tools">No seal; responsibility stays with the engineer who uses the tool</td></tr>
+<tr><th scope="row">Pricing</th><td data-label="Pylon" class="nc">Fixed price per signed package, comment rounds included</td><td data-label="Traditional consultancy">Fixed fees scoped from hours; extra comment rounds billed hourly</td><td data-label="Software tools">Subscription or per report, on top of engineering fees</td></tr>
+<tr><th scope="row">Capacity</th><td data-label="Pylon" class="nc">Agents do the drafting, checking and tracking, so each engineer can carry more packages</td><td data-label="Traditional consultancy">Limited by engineers available; firms report long backlogs</td><td data-label="Software tools">Speeds up an engineer you still have to hire</td></tr>
+<tr><th scope="row">Utility-specific requirements</th><td data-label="Pylon" class="nc">Per-utility rulebook, checked before filing and updated after every comment round</td><td data-label="Traditional consultancy">Held in individual engineers' experience</td><td data-label="Software tools">Can flag gaps, but can't stamp the fix or sit in the comment round</td></tr>
+<tr><th scope="row">Traceability</th><td data-label="Pylon" class="nc">Every number traced to its inputs; rerun bundles in ETAP, PSS/E or PSCAD</td><td data-label="Traditional consultancy">Model files and calculations, organized per firm practice</td><td data-label="Software tools">Varies by tool</td></tr>
+<tr><th scope="row">Coordination</th><td data-label="Pylon" class="nc">One owner of the file, one tracker, a client status portal</td><td data-label="Traditional consultancy">Email and phone between applicant, consultant and utility</td><td data-label="Software tools">Logs handoffs between parties; doesn't remove them</td></tr>
 </tbody>
 </table>
 </div>
 <p class="src" style="margin-top:14px">A general comparison of approaches, not of named firms or products.</p>
 </div>
 </section>
-
 <section class="light" id="pricing">
 <div class="wrap">
 <div class="price">
-<div class="reveal"><span class="eyebrow" style="color:var(--red)">Pricing</span><h2>A fixed price per signed package.</h2><p class="mute" style="font-size:18px">We quote each package from its scope: the utility, the request type, the service and the site's existing records. You know the fee before we start, and it doesn't grow with each comment round.</p>
+<div class="reveal"><span class="eyebrow">Pricing</span><h2>A fixed price per signed package.</h2><p class="mute" style="font-size:18px">We quote each package from its scope: the utility, the request type, the service and the site's existing records. You know the fee before we start, and it doesn't grow with each comment round.</p>
 <ul class="pnotes"><li>Fixed fee per signed package, quoted per package</li><li>Utility comment rounds included</li><li>Billed on milestones: screen, application, design, close-out</li><li>Paid from the engineering budget you already have, with no software procurement</li></ul>
 <p style="margin-top:24px"><a class="btn" href="#contact">Request a connection assessment</a></p></div>
 <div class="pkgs reveal">
@@ -487,30 +879,28 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 </div>
 </div>
 </section>
-
 <section id="faq">
 <div class="wrap">
 <div class="sh reveal"><span class="eyebrow">FAQ</span><h2>Common questions</h2></div>
 <div class="faq reveal">
-<details><summary>Is NewCo a software company?</summary><p>No. NewCo is an engineering firm. We sell finished, engineer-sealed engineering packages at a fixed price per package. AI agents are how we produce the work; the deliverable and the responsibility are an engineer's.</p></details>
-<details><summary>Who signs my package, and who is responsible for it?</summary><p>A licensed professional engineer who is NewCo's engineer of record for your project. They approve the design basis at kickoff, review the work and the checker's findings, approve the package at issue and apply the seal personally. Agents never hold signing credentials.</p></details>
+<details><summary>Is Pylon a software company?</summary><p>No. Pylon is an engineering firm. We sell finished, engineer-sealed engineering packages at a fixed price per package. AI agents are how we produce the work; the deliverable and the responsibility are an engineer's.</p></details>
+<details><summary>Who signs my package, and who is responsible for it?</summary><p>A licensed professional engineer who is Pylon's engineer of record for your project. They approve the design basis at kickoff, review the work and the checker's findings, approve the package at issue and apply the seal personally. Agents never hold signing credentials.</p></details>
 <details><summary>Is AI-assisted engineering allowed in Ontario and Québec?</summary><p>Yes, when a licensed engineer directs the work and takes responsibility for it. PEO holds engineers fully responsible for AI output (<a href="https://www.peo.on.ca/node/8224" target="_blank" rel="noopener">PEO AI advisory</a>), and the OIQ has published a guide on responsible AI use (<a href="https://gpp.oiq.qc.ca/Utilisation_responsable_de_l_IA.htm" target="_blank" rel="noopener">OIQ guide</a>). In Québec, plans must be prepared under the engineer's direction and immediate supervision, so our engineer sets the design basis at the start and supervises through review as the work proceeds.</p></details>
 <details><summary>What does the utility receive?</summary><p>A standard engineer-sealed submission in the utility's own forms and formats, through its normal intake channel. The engineer of record answers for it like any other sealed package.</p></details>
 <details><summary>Which engineering software do you use?</summary><p>The tools utilities already accept: ETAP or SKM PowerTools for MV studies, arc flash and coordination; Siemens PSS/E for anything the IESO or a transmitter will review; PSCAD for transient studies when required; AutoCAD for drawings. We don't write our own solvers, and every study comes with a model file your reviewer can open and rerun.</p></details>
 <details><summary>Do you run the utility's impact studies?</summary><p>No. The utility and, for larger loads, the IESO run their impact assessments. We supply the data and models (for example PSS/E files where required) and answer their questions, so the inputs are complete the first time.</p></details>
-<details><summary>Do you build or supply equipment?</summary><p>No. NewCo does engineering, never physical construction. We write the specifications and review submittals; you or your EPC buy the equipment, and contractors and the utility do the physical work.</p></details>
+<details><summary>Do you build or supply equipment?</summary><p>No. Pylon does engineering, never physical construction. We write the specifications and review submittals; you or your EPC buy the equipment, and contractors and the utility do the physical work.</p></details>
 <details><summary>How do you handle our drawings and data?</summary><p>Enterprise model contracts with zero data retention and no training on inputs, hosting and storage in a Canadian region, and isolation between clients. Utility system data supplied under NDA is handled under the utility's terms.</p></details>
 <details><summary>How is the price set?</summary><p>A fixed price per package, quoted from the package's scope: the utility, request type, service and site records. Comment rounds are included, and billing follows milestones.</p></details>
 <details><summary>Do you work on generation and storage connections?</summary><p>We start with load connections. Generation and storage connections go through the same engineering steps and are our next service area.</p></details>
 </div>
 </div>
 </section>
-
 <section class="dark" id="about">
 <div class="wrap about">
-<div class="reveal"><span class="eyebrow">About NewCo</span><h2>Our mission: get electrified load onto the grid sooner.</h2>
+<div class="reveal"><span class="eyebrow">About Pylon</span><h2>Our mission: get electrified load onto the grid sooner.</h2>
 <p class="big">Canada can't decarbonize without connecting new electric load, and every one of those connections has to be engineered first.</p>
-<p>The main way to cut emissions from transport, buildings and heavy industry is to switch to electricity: EV fleets and charging depots, heat pumps, and electric furnaces and boilers in steel, mining and manufacturing. Almost all of that new load comes through MV and HV connections or upgrades, and until one is approved, the site keeps burning diesel or gas. NewCo exists to shorten the engineering part of that wait.</p>
+<p>The main way to cut emissions from transport, buildings and heavy industry is to switch to electricity: EV fleets and charging depots, heat pumps, and electric furnaces and boilers in steel, mining and manufacturing. Almost all of that new load comes through MV and HV connections or upgrades, and until one is approved, the site keeps burning diesel or gas. Pylon exists to shorten the engineering part of that wait.</p>
 <p>We serve data centres too, but our climate case rests on electrified industry, fleets and buildings, and next on clean generation and storage. We measure it in months saved from application to energization.</p></div>
 <div class="cstats">
 <div class="cs reveal"><div class="n">~45%</div><p>of Canada's emissions come from transport, buildings and heavy industry (309 of 685 Mt).</p><div class="src">Source: <a href="https://www.canada.ca/en/environment-climate-change/services/climate-change/greenhouse-gas-emissions/sources-sinks-executive-summary-2026.html" target="_blank" rel="noopener">Environment and Climate Change Canada</a></div></div>
@@ -519,14 +909,13 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 </div>
 </div>
 </section>
-
 <section class="light" id="contact">
 <div class="wrap contact">
-<div class="reveal"><span class="eyebrow" style="color:var(--red)">Contact</span><h2>Request a connection assessment</h2><p class="mute" style="font-size:17px">Tell us about the site and the connection. An engineer will review it and reply with a proposed scope and a fixed price for the first package.</p>
+<div class="reveal"><span class="eyebrow">Contact</span><h2>Request a connection assessment</h2><p class="mute" style="font-size:17px">Tell us about the site and the connection. An engineer will review it and reply with a proposed scope and a fixed price for the first package.</p>
 <ul class="cinfo">
-<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0114 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Ontario first: Toronto Hydro, Alectra and Hydro One service territories</span></li>
-<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg><span>Useful to have: site address, existing single-line or as-builts, recent bills or interval data, and your target load and date</span></li>
-<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b1a1a" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>Every assessment is reviewed by a licensed engineer</span></li>
+<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff7a80" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0114 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Ontario first: Toronto Hydro, Alectra and Hydro One service territories</span></li>
+<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff7a80" stroke-width="1.8" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg><span>Useful to have: site address, existing single-line or as-builts, recent bills or interval data, and your target load and date</span></li>
+<li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff7a80" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>Every assessment is reviewed by a licensed engineer</span></li>
 </ul></div>
 <form id="cform" class="reveal" novalidate>
 <label>Full name<input name="name" required autocomplete="name"><span class="err"></span></label>
@@ -538,7 +927,7 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <label>Facility type<select name="facility"><option>Industrial site</option><option>EV or fleet depot</option><option>Data centre</option><option>Large commercial building</option><option>Other</option></select></label>
 <label>Target load or service size (optional)<input name="load" placeholder="e.g. kVA, MW or amperes"></label>
 <label class="full">Project details<textarea name="msg" placeholder="Site location, current service, what you're adding and when you need it"></textarea></label>
-<label class="chk full"><input type="checkbox" name="consent" required> I agree that NewCo may contact me about this request.</label>
+<label class="chk full"><input type="checkbox" name="consent" required> I agree that Pylon may contact me about this request.</label>
 <div class="full"><button class="btn" type="submit">Request a connection assessment</button></div>
 <div class="formmsg" id="formmsg" role="status">Thank you. Your request has been noted. (This form is a front-end demo; no data was sent.)</div>
 </form>
@@ -549,28 +938,154 @@ blockquote.oeb{font-size:18px;padding:20px}.about .big{font-size:22px}
 <footer>
 <div class="wrap">
 <div class="fgrid">
-<div><a class="logo" href="#hero" style="padding:0;margin-bottom:12px"><svg width="26" height="26" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="6" fill="#8b1a1a"/><path d="M7 22V8l8 9 8-9v14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="15" cy="17" r="1.8" fill="#fff"/></svg>NewCo</a><p style="margin:0;max-width:320px">An engineering firm for medium- and high-voltage grid connections. AI agents draft, check and track; licensed engineers sign.</p></div>
+<div><a class="logo" href="#hero" style="padding:0;margin-bottom:12px"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="7" fill="#a3202a"/><path d="M10 24L15 6l5 18M9 11h12M7.5 15h15M12 19.5h6M12.6 15l4.8 4.5M17.4 15l-4.8 4.5" fill="none" stroke="#fff" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></svg>PYLON</a><p style="margin:0;max-width:320px">An engineering firm for medium- and high-voltage grid connections. AI agents draft, check and track; licensed engineers sign.</p></div>
 <div><h4>Firm</h4><a href="#how">How it works</a><a href="#why">Why an engineering firm</a><a href="#trust">Trust and traceability</a><a href="#about">About</a></div>
 <div><h4>Services</h4><a href="#services">By connection phase</a><a href="#who">Who it's for</a><a href="#utilities">Utilities served</a><a href="#pricing">Pricing</a></div>
 <div><h4>Get started</h4><a href="#contact">Request a connection assessment</a><a href="#faq">FAQ</a><a href="#compare">Compare</a><a href="#hero">Back to top</a></div>
 </div>
-<div class="fbot"><span>© 2026 NewCo. Engineering services only; NewCo does not perform construction.</span><span>Concept website prepared for research purposes.</span></div>
+<div class="fbot"><span>© 2026 Pylon. Engineering services only; Pylon does not perform construction.</span><span class="concept">Concept website prepared for research purposes.</span></div>
 </div>
 </footer>
 <script>
-const bg=document.getElementById('burger'),mn=document.getElementById('mnav');
+(function(){
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(RM){document.documentElement.classList.add('rm');document.querySelectorAll('animateMotion').forEach(a=>a.remove())}
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function onView(node,fn,opt){if(!node)return;if(!('IntersectionObserver' in window)){fn(true);return}
+const o=new IntersectionObserver(es=>es.forEach(e=>fn(e.isIntersecting,o)),opt||{threshold:.25});o.observe(node);return o}
+/* nav, reveal, form */
+const bg=$('#burger'),mn=$('#mnav');
 bg.onclick=()=>{const o=mn.classList.toggle('open');bg.setAttribute('aria-expanded',o)};
 mn.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mn.classList.remove('open');bg.setAttribute('aria-expanded',false)}));
-const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'}):null;
-document.querySelectorAll('.reveal').forEach(el=>io?io.observe(el):el.classList.add('in'));
+const io='IntersectionObserver' in window&&!RM?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'}):null;
+$$('.reveal').forEach(e=>io?io.observe(e):e.classList.add('in'));
 const navA=[...mn.querySelectorAll('a')],tg=navA.map(a=>document.querySelector(a.getAttribute('href')));
-addEventListener('scroll',()=>{const y=scrollY+120;let c=null;tg.forEach((s,i)=>{if(s.offsetTop<=y)c=i});navA.forEach((a,i)=>a.classList.toggle('active',i===c))},{passive:true});
-const f=document.getElementById('cform');
+function act(){const y=scrollY+120;let c=null;tg.forEach((s,i)=>{if(s&&s.offsetTop<=y)c=i});navA.forEach((a,i)=>a.classList.toggle('active',i===c))}
+addEventListener('scroll',act,{passive:true});act();
+const f=$('#cform');
 f.addEventListener('submit',e=>{e.preventDefault();let ok=true;
 f.querySelectorAll('[required]').forEach(i=>{const er=i.parentElement.querySelector('.err');let m='';
 if(i.type==='checkbox'){if(!i.checked)m='x'}else if(!i.value.trim())m='Required.';else if(i.type==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(i.value))m='Enter a valid email address.';
-if(er)er.textContent=m;if(i.type==='checkbox')i.parentElement.style.color=m?'#b02a2a':'';if(m)ok=false});
-if(ok){document.getElementById('formmsg').classList.add('show');f.querySelector('button[type=submit]').disabled=true}});
+if(er)er.textContent=m;if(i.type==='checkbox')i.parentElement.style.color=m?'#ff7a80':'';if(m)ok=false});
+if(ok){$('#formmsg').classList.add('show');f.querySelector('button[type=submit]').disabled=true}});
+/* hero canvas */
+(function(){const cv=$('#heroCanvas');if(!cv)return;const cx=cv.getContext('2d');let W,H,G=56,P=[],run=!RM,vis=true,raf;
+function size(){const d=Math.min(devicePixelRatio||1,2),r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);if(!run)draw()}
+function np(){const h=Math.random()<.6,red=Math.random()<.4;return{h,red,l:Math.floor(Math.random()*((h?H:W)/G))*G+G,p:-Math.random()*400,v:(h?1:.8)*(1.2+Math.random()*2.2),len:80+Math.random()*120}}
+function grid(){cx.clearRect(0,0,W,H);cx.strokeStyle='rgba(60,95,150,.14)';cx.lineWidth=1;cx.beginPath();for(let x=.5;x<W;x+=G){cx.moveTo(x,0);cx.lineTo(x,H)}for(let y=.5;y<H;y+=G){cx.moveTo(0,y);cx.lineTo(W,y)}cx.stroke();
+cx.fillStyle='rgba(127,182,255,.18)';for(let x=0;x<W;x+=G*3)for(let y=0;y<H;y+=G*3)cx.fillRect(x-1,y-1,2,2)}
+function draw(){grid();if(!run)return;P.forEach(p=>{p.p+=p.v;const max=p.h?W:H;if(p.p-p.len>max)Object.assign(p,np(),{p:-20});
+const a=p.p-p.len,b=p.p,col=p.red?'255,110,118':'127,182,255';let g;
+if(p.h){g=cx.createLinearGradient(a,0,b,0)}else{g=cx.createLinearGradient(0,a,0,b)}
+g.addColorStop(0,'rgba('+col+',0)');g.addColorStop(1,'rgba('+col+',.85)');cx.strokeStyle=g;cx.lineWidth=1.6;cx.beginPath();
+if(p.h){cx.moveTo(a,p.l+.5);cx.lineTo(b,p.l+.5)}else{cx.moveTo(p.l+.5,a);cx.lineTo(p.l+.5,b)}cx.stroke();
+cx.fillStyle='rgba('+col+',1)';cx.shadowColor='rgba('+col+',1)';cx.shadowBlur=10;cx.beginPath();if(p.h)cx.arc(b,p.l+.5,2,0,7);else cx.arc(p.l+.5,b,2,0,7);cx.fill();cx.shadowBlur=0})}
+function loop(){draw();if(run&&vis&&!document.hidden)raf=requestAnimationFrame(loop);else raf=null}
+size();for(let i=0;i<16;i++)P.push(np());addEventListener('resize',size);
+if(run){onView($('#hero'),v=>{vis=v;if(v&&!raf)loop()},{threshold:0});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&vis&&!raf)loop()});loop()}else draw()})();
+window.__P={RM,$,$$,el,onView};
+})();
+
+(function(){const {RM,$,$$,el,onView}=window.__P;
+/* flow */
+const N=[{k:'01 · CUSTOMER',t:'Customer request',s:'site · records · load',c:'#f3c46b',d:'You send the site, the existing records and the target load. One project record opens for the package.'},
+{k:'02 · AGENTS',t:'Agents work the file',s:'originate · check · track',c:'#7fb6ff',d:'Role agents originate drawings, calculations and forms; an independent checker and rule checks test them; one tracker follows status.'},
+{k:'03 · ENGINEER',t:'P.Eng signs off',s:'review · approve · seal',c:'#ff7a80',d:'The engineer of record sets the design basis, reviews every finding, approves the package and applies the seal personally.'},
+{k:'04 · SUBMISSION',t:'Sealed package filed',s:"utility's own intake",c:'#ffb3b6',d:"A standard engineer-sealed submission goes in through the utility's normal intake channel, in its own forms and formats."},
+{k:'05 · UTILITY',t:'Utility comments',s:'completeness · technical',c:'#a99cff',d:"The utility's reviewers run the completeness review and send technical comments, often in rounds."},
+{k:'06 · RULEBOOK',t:'Rulebook learns',s:'capture · map · validate',c:'#5fe0a6',d:"Each comment is classified and mapped to a rule; a senior engineer validates it, and it checks every live package for that utility."}];
+const svg=$('#flowsvg'),wrap=$('#flow'),cap=$('#fcap');let nodes=[],cur=0,auto=true,timer=null,played=false;
+N.forEach((n,i)=>{const b=document.createElement('button');b.type='button';b.style.setProperty('--c',n.c);b.innerHTML='<b>'+n.t+'</b>'+n.d;b.onclick=()=>{auto=false;setOn(i)};cap.appendChild(b)});
+function build(){svg.innerHTML='';const V=matchMedia('(max-width:820px)').matches;let W,H,pos,nw,nh,main,loopP,lab;
+if(!V){W=1140;H=262;nw=172;nh=96;pos=N.map((_,i)=>[i*193.6,30]);
+main='M86 78H1054V200H280V126';loopP='M1054 126V200H280V128';lab=[668,222]}
+else{W=340;H=672;nw=250;nh=80;pos=N.map((_,i)=>[30,8+i*112]);
+main='M155 48V608H322V160H282';loopP='M280 608H322V160H282';lab=null}
+svg.setAttribute('viewBox','0 0 '+W+' '+H);
+const df=el('defs',{},svg),m=el('marker',{id:'ah',viewBox:'0 0 10 10',refX:'8',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'},df);el('path',{d:'M0 0L10 5L0 10z',fill:'#8fb0d8'},m);
+const gE=el('g',{},svg),gP=el('g',{class:'pkts'},svg),gN=el('g',{},svg);
+const edges=[];for(let i=0;i<5;i++){const [x,y]=pos[i],[x2,y2]=pos[i+1];edges.push(V?'M'+(x+nw/2)+' '+(y+nh)+'V'+(y2-3):'M'+(x+nw)+' '+(y+nh/2)+'H'+(x2-3))}
+edges.push(loopP);
+edges.forEach((d,i)=>{const p=el('path',{d,class:'ed',stroke:i===5?'#5fe0a6':'#6f8fbf','marker-end':'url(#ah)'},gE);if(i===5)p.setAttribute('stroke-dasharray','5 6');
+const L=Math.ceil(p.getTotalLength?p.getTotalLength():400);p.style.setProperty('--len',L);p.style.transitionDelay=(.35+i*.32)+'s';if(i===5){p.style.strokeDasharray=L;}});
+if(lab){const t=el('text',{x:lab[0],y:lab[1],'text-anchor':'middle',class:'edlab'},gE);t.textContent='Every utility comment becomes a check on the next package';t.style.transitionDelay='2.2s'}
+else{const t=el('text',{x:333,y:384,'text-anchor':'middle',class:'edlab',transform:'rotate(-90 333 384)'},gE);t.textContent='rulebook → next package';t.style.transitionDelay='2.2s'}
+if(!RM)[0,3,6].forEach(b=>{const c=el('circle',{r:'3.5',fill:'#dbe9ff',style:'filter:drop-shadow(0 0 5px #7fb6ff)'},gP);el('animateMotion',{dur:'9s',begin:b+'s',repeatCount:'indefinite',path:main},c)});
+nodes=N.map((n,i)=>{const [x,y]=pos[i],g=el('g',{class:'nd',style:'--c:'+n.c+';transition-delay:'+(i*.3)+'s'},gN);
+el('rect',{x,y,width:nw,height:nh,rx:12},g);el('rect',{x:x+14,y:y,width:nw-28,height:2.5,rx:1,fill:n.c,class:'bar'},g);
+const o=V?[20,44,64]:[24,52,74];const a=el('text',{x:x+14,y:y+o[0],class:'t0',fill:n.c},g);a.textContent=n.k;
+const b=el('text',{x:x+14,y:y+o[1],class:'t1'},g);b.textContent=n.t;const c=el('text',{x:x+14,y:y+o[2],class:'t2'},g);c.textContent=n.s;
+g.style.cursor='pointer';g.addEventListener('click',()=>{auto=false;setOn(i)});return g});
+setOn(cur)}
+function setOn(i){cur=i;nodes.forEach((g,j)=>g.classList.toggle('on',j===i));[...cap.children].forEach((b,j)=>b.classList.toggle('on',j===i))}
+build();let mqv=matchMedia('(max-width:820px)');mqv.addEventListener&&mqv.addEventListener('change',()=>{build();if(played)wrap.classList.add('play')});
+function tick(){if(auto)setOn((cur+1)%N.length)}
+onView(wrap,v=>{if(v){if(!played){played=true;requestAnimationFrame(()=>wrap.classList.add('play'))}if(!RM&&!timer)timer=setInterval(tick,2200)}else if(timer){clearInterval(timer);timer=null}},{threshold:.3});
+if(RM)wrap.classList.add('play');
+/* journey */
+const OW={you:['You (customer)','#f3c46b','You'],nc:['Pylon agents + engineer','#ff7a80','Pylon'],ut:['Utility','#7fb6ff','Utility'],es:['ESA / inspector','#a99cff','ESA']};
+const J=[['Check the site','Site and feasibility screening','nc',[],'Where and how the site can connect before you commit: available capacity, the station and feeder that serve it, constraints and likely upgrades.','Pylon owns'],
+['Size the load and design','Load sizing and concept design','nc',[],'Demand calculation under the Ontario Electrical Safety Code and your growth plan, then service voltage and configuration.','Pylon owns'],
+['Apply to the utility','Utility application','nc',['ut'],"A complete connection request assembled against the utility's own checklist, sealed and submitted.",'Pylon owns'],
+['Answer utility questions','Utility comment rounds','ut',['nc'],"The utility runs its completeness review and sends technical comments. Pylon writes the responses, revises drawings and calculations, and resubmits under the engineer's approval.",'Pylon owns the responses'],
+['Utility studies','Utility and IESO impact assessments','ut',['nc'],'The utility and, for larger loads, the IESO run their impact assessments. Pylon supplies the data and models and answers their questions.',"Pylon supports; the utility and the IESO run the studies"],
+['Utility offer','Offer to connect','you',['nc'],"Pylon checks the technical scope, ownership boundaries and cost drivers in the utility's offer, and advises on alternatives, including flexible connections.",'Pylon supports; the owner negotiates and signs'],
+['Detailed design','Detailed design at 30/60/90%','nc',[],"Full design of the customer's facilities, issued in stages for review: single-lines, layouts, grounding, protection and control, metering and SCADA.",'Pylon owns'],
+['Approvals','Utility and ESA design approval','es',['ut','nc'],'ESA Electronic Plan Review submissions and responses, and utility review of protection settings, metering and interfaces.','Pylon owns the submission and responses'],
+['Construction drawings','Issued-for-construction and procurement support','nc',['you'],'The sealed IFC set and specifications, plus technical review of what you buy.','Pylon owns drawings and specs; you or your EPC buy'],
+['Construction','Construction support','you',['nc'],'Your EPC or contractor builds. Pylon answers contractor questions, checks field changes for impact and produces as-built drawings.','Pylon supports; the EPC or contractor builds'],
+['Testing','Testing and commissioning','nc',[],'Commissioning plan, final relay settings and test sheets. Pylon reviews field results against the design.','Pylon reviews; test crews do the hands-on work'],
+['Final inspection','Certification and ESA inspection','es',['nc'],'Pylon issues the engineer-certified test report and supports the ESA inspection.','Pylon certifies'],
+['Power on','Energization and close-out','ut',['nc'],'The utility connects and switches on. Pylon coordinates, hands over records and feeds the outcome back into the rulebook.','The utility energizes']];
+const tr=$('#jtrack'),det=$('#jdetail'),fill=$('#jfill');let js=0,jauto=true,jt=null,jseen=false,filt=null;
+J.forEach((s,i)=>{const li=document.createElement('li');li.dataset.o=s[2];li.dataset.a=s[3].join(' ');const c=OW[s[2]][1];
+li.innerHTML='<button type="button" style="--c:'+c+'" aria-label="Step '+i+': '+s[0]+', owned by '+OW[s[2]][0]+'"><span class="dd">'+i+'</span><span class="nm">'+s[0]+'</span><span class="ow">'+OW[s[2]][2]+'</span></button>';
+li.querySelector('button').onclick=()=>{jauto=false;jsel(i)};tr.appendChild(li)});
+function jsel(i){js=i;[...tr.children].forEach((li,j)=>li.classList.toggle('sel',j===i));const s=J[i];
+const pr=Math.max(0.0001,i/12);fill.style.width=(pr*100)+'%';fill.style.setProperty('--h',(pr*100)+'%');
+const own='<span style="--c:'+OW[s[2]][1]+'"><i></i>'+OW[s[2]][0]+'</span>'+s[3].map(o=>'<span class="sec" style="--c:'+OW[o][1]+'"><i></i>'+OW[o][0]+'</span>').join('');
+det.innerHTML='<div class="jfade"><span class="tagm">Step '+i+' · '+(i+1)+' of 13</span><h3>'+s[0]+'</h3><div class="tech">'+s[1]+'</div><p>'+s[4]+'</p></div><div class="jfade"><span class="tagm">Who owns it</span><div class="jowners">'+own+'</div><div class="jrole">'+s[5]+'</div><div class="jctl"><button type="button" class="btn ghost sm" id="jprev" aria-label="Previous step">←</button><button type="button" class="btn ghost sm" id="jnext" aria-label="Next step">→</button><button type="button" class="btn ghost sm" id="jplay">'+(jauto&&!RM?'Pause':'Play')+'</button></div></div>';
+$('#jprev').onclick=()=>{jauto=false;jsel((js+12)%13)};$('#jnext').onclick=()=>{jauto=false;jsel((js+1)%13)};
+$('#jplay').onclick=()=>{jauto=!jauto;$('#jplay').textContent=jauto?'Pause':'Play'}}
+$$('#jlegend button').forEach(b=>b.onclick=()=>{const o=b.dataset.o;filt=filt===o?null:o;$$('#jlegend button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.o===filt));
+[...tr.children].forEach(li=>li.classList.toggle('dim',!!filt&&li.dataset.o!==filt&&!li.dataset.a.split(' ').includes(filt)))});
+jsel(0);if(RM){jauto=false;jsel(3)}
+onView($('#jwrap'),v=>{if(v){if(!jseen&&!RM){jseen=true}if(!RM&&!jt)jt=setInterval(()=>{if(jauto)jsel((js+1)%13)},2600)}else if(jt){clearInterval(jt);jt=null}},{threshold:.3});
+window.__J={jsel,stop:()=>{jauto=false}};window.__F={setOn,stop:()=>{auto=false}};
+})();
+
+(function(){const {RM,$,$$,onView}=window.__P;
+/* provenance glimpse */
+const pvn=$('#pvn'),pop=$('#pop');pvn.onclick=()=>{const on=pop.classList.toggle('off');pvn.classList.toggle('on',!on);pvn.setAttribute('aria-expanded',!on)};
+$('#rerun').onclick=()=>{const r=$('#rrs');r.className='rs';r.innerHTML='<span class="spin"></span> Rerunning case…';setTimeout(()=>{r.className='rs ok';r.textContent='✓ Reproduced · Δ 0.0% (sample)'},RM?0:1300)};
+/* fleet */
+const AG=[['Intake','run',['Parsing a new request','Opening project record PKG-0171']],['Feasibility','run',['Screening feeder capacity, sample site','Drafting options memo']],
+['Load-Calc','run',['Demand calc, PKG-0157','Growth scenario B']],['Studies','run',['Short-circuit case, PKG-0142','Arc-flash case set']],['Drafting','run',['Site plan rev C','Single-line rev D']],
+['QA/QC Checker','run',['Checking drawings vs. rulebook','Cross-checking forms and calcs']],['Utility Liaison','wait',['Response letter ready · awaiting human release']],
+['Rule-Tracking','wait',['Proposed rule from comment C-12 · awaiting validation']],['PM','idle',['Schedule updated · next sync 14:00']],['Doc-Control','idle',['Revision set rev C locked']]];
+const fl=$('#fleet');const st=AG.map((a,i)=>({p:a[1]==='wait'?100:a[1]==='idle'?100:15+((i*37)%70),t:0}));
+fl.innerHTML=AG.map((a,i)=>'<div class="ag '+a[1]+'"><div class="an"><span class="sd"></span>'+a[0]+'</div><div class="at">'+a[2][0]+'</div><div class="pb"><i style="width:'+st[i].p+'%"></i></div></div>').join('');
+const cards=[...fl.children];let ft=null;
+function ftick(){AG.forEach((a,i)=>{if(a[1]!=='run')return;const s=st[i];s.p+=4+Math.random()*12;if(s.p>=100){s.p=6;s.t=(s.t+1)%a[2].length;cards[i].querySelector('.at').textContent=a[2][s.t]}cards[i].querySelector('.pb i').style.width=Math.min(100,s.p)+'%'})}
+if(!RM)onView($('#g3'),v=>{if(v&&!ft)ft=setInterval(ftick,1100);else if(!v&&ft){clearInterval(ft);ft=null}},{threshold:.2});
+/* seal checklist */
+const items=$$('#sck li'),sb=$('#sealbtn');let sealed=false,sdone=false;
+function ready(){sb.disabled=false;sb.classList.add('ready')}
+if(RM){items.forEach(l=>l.classList.add('ok'));ready()}
+else onView($('#g4'),(v,o)=>{if(v&&!sdone){sdone=true;o.disconnect();items.forEach((l,i)=>setTimeout(()=>l.classList.add('ok'),400+i*650));setTimeout(ready,400+items.length*650)}},{threshold:.4});
+sb.onclick=()=>{if(sealed)return;sealed=true;sb.textContent='Seal applied (demo)';sb.disabled=true;sb.classList.remove('ready');$('#sdone').classList.add('show')};
+/* trust trace */
+const tl=$$('#tch li'),beam=$('#beam'),trr=$('#trr');let tt=[];
+function tclear(){tt.forEach(clearTimeout);tt=[];tl.forEach(l=>l.classList.remove('lit'));beam.style.height='0';trr.textContent='Reproduces the result from the bundle';trr.style.color=''}
+function tlit(i){tl[i].classList.add('lit');const l=tl[i];beam.style.height=(l.offsetTop+20)+'px';if(i===tl.length-1){trr.textContent='✓ Rerun reproduces 35.6 kA from the bundle (simulated)';trr.style.color='#5fe0a6'}}
+function trace(){tclear();if(RM){tl.forEach((_,i)=>tlit(i));return}tl.forEach((_,i)=>tt.push(setTimeout(()=>tlit(i),300+i*750)))}
+let tseen=false;onView($('#trace'),(v,o)=>{if(v&&!tseen){tseen=true;o.disconnect();trace()}},{threshold:.35});
+$('#retrace').onclick=trace;
+window.__T={trace,all:()=>{tclear();tl.forEach((_,i)=>tlit(i))},seal:()=>{items.forEach(l=>l.classList.add('ok'));ready()}};
+})();
+
 </script>
 </body>
 </html>
